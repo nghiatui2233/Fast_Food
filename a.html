@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Dropdown Menu Example</title>
+	<style>
+		.dropdown {
+			position: relative;
+			display: inline-block;
+		}
+		
+		.dropdown-content {
+			display: none;
+			position: absolute;
+			z-index: 1;
+		}
+		
+		.dropdown.active .dropdown-content {
+			display: block;
+		}
+		
+		.dropdown-content a {
+			display: block;
+			padding: 10px;
+			text-decoration: none;
+			color: #000;
+			background-color: #f1f1f1;
+		}
+		
+		.dropdown-content a:hover {
+			background-color: #ddd;
+		}
+	</style>
+</head>
+<body>
+	<div class="dropdown">
+		<button onclick="toggleMenu()">Menu</button>
+		<div class="dropdown-content">
+			<a href="#">Item 1</a>
+			<a href="#">Item 2</a>
+			<a href="#">Item 3</a>
+		</div>
+	</div>
+	
+	<script>
+		function toggleMenu() {
+			var dropdown = document.querySelector('.dropdown');
+			dropdown.classList.toggle('active');
+		}
+	</script>
+</body>
+</html>
