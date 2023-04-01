@@ -32,12 +32,12 @@
                     <div class="tile-body">
                         <?php
                         include_once("connectDBadmin.php"); // Kết nối đến cơ sở dữ liệu
-                        function bind_Store_List($Connect, $selectedValue)
+                        function bind_Category_List($Connect, $selectedValue)
                         {
                             $sqlstring = "SELECT * from category";
                             $result = mysqli_query($Connect, $sqlstring);
                             while ($row = mysqli_fetch_array($result)) {
-                                if ($row['category'] == $selectedValue) {
+                                if ($row['category_id'] == $selectedValue) {
                                     echo "<option value ='" . $row['category_id'] . "' selected>" . $row['category_name'] . "</option>";
                                 } else {
                                     echo "<option value='" . $row['category_id'] . "'>" . $row['category_name'] . "</option>";
@@ -81,9 +81,9 @@
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="product-category" class="control-label">Category</label>
-                                    <select class='form-control' name='category' id='product-category'>
+                                    <select class='form-control' name='category' id=''>
                                         <?php
-                                        bind_Store_List($Connect, $row['category_id'])
+                                        bind_Category_List($Connect, $row['category_id'])
                                         ?>
                                     </select>
                                 </div>
@@ -94,15 +94,10 @@
                                 <div class="form-group col-md-12">
                                     <label class="control-label">Image Product</label>
                                     <div id="myfileupload">
-                                        <input type="file" id="uploadfile" name="image" onchange="readURL(this);" />
+                                        <input type="file" id="" name="image" onchange="readURL(this);" />
                                     </div>
                                     <div id="thumbbox">
                                         <img src='img/<?php echo $row["image"] ?>' height="450" width="400" alt="Thumb image" id="thumbimage" />
-                                        <a class="removeimg" href="javascript:"></a>
-                                    </div>
-                                    <div id="boxchoice">
-                                        <a href="javascript:" class="Choicefile"><i class="fas fa-cloud-upload-alt"></i></a>
-                                        <p style="clear:both"></p>
                                     </div>
                                 </div>
                                 <div class="form-group col-md-12">

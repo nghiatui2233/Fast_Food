@@ -1,0 +1,67 @@
+.account-profile h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+    text-align: center;
+  }
+
+  .account-profile p {
+    text-align: center;
+    margin: 16px 0;
+  }
+
+  .account-profile a {
+    color: #dfa147;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .account-profile a:hover {
+    color: #dfa147;
+  }
+
+  .account-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: #f7f7f7;
+    width: 280px;
+    min-height: 100vh;
+    padding: 32px;
+    box-sizing: border-box;
+  }
+
+  .account-left ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .account-left li {
+    margin: 16px 0;
+  }
+
+  .account-left li a {
+    color: #333;
+    font-size: 18px;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .account-left li a:hover {
+    color: #dfa147;
+  }
+
+  .account-left li.active a {
+    color: #dfa147;
+    font-weight: bold;
+  }
+
+  .back-button-container {
+    position: fixed;
+    bottom: 0;
+    left: 60;
+    padding: 20px;
+  }

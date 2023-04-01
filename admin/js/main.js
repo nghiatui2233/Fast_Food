@@ -43,7 +43,6 @@ function readURL(input, thumbimage) {
   $('.filename').text($("#uploadfile").val());
   $('.Choicefile').css('background', '#14142B');
   $('.Choicefile').css('cursor', 'default');
-  $(".removeimg").show();
   $(".Choicefile").unbind('click');
 
 }
@@ -51,16 +50,5 @@ $(document).ready(function () {
   $(".Choicefile").bind('click', function () {
 	$("#uploadfile").click();
 
-  });
-  $(".removeimg").click(function () {
-	$("#thumbimage").attr('src', '').hide();
-	$("#myfileupload").html('<input type="file" id="uploadfile"  onchange="readURL(this);" />');
-	$(".removeimg").hide();
-	$(".Choicefile").bind('click', function () {
-	  $("#uploadfile").click();
-	});
-	$('.Choicefile').css('background', '#14142B');
-	$('.Choicefile').css('cursor', 'pointer');
-	$(".filename").text("");
   });
 })

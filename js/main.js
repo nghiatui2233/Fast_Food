@@ -226,6 +226,7 @@ const checkOutSum = () => {
     }
 
     return [items, Qty, subTotal, total];
+    
 }
 
 const checkOutPrint = () => {

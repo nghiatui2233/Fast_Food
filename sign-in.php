@@ -2,7 +2,8 @@
 	<meta charset="UTF-8">
 	<title>Login</title>
 	<link rel="stylesheet" href="./css/custome.css">
-	<link rel="stylesheet" href="./css/styles.css">
+	<link rel="stylesheet" href="./css/styles1.css">
+	<link rel="stylesheet" href="./css/login.css">
 	<script src="js/login.js"></script>
 </head>
 <script>
@@ -15,9 +16,10 @@
 		}
 	}
 </script>
+
 <body>
 	<?php
-
+	include 'header.php';
 	if (isset($_POST['btnLogin'])) {
 		$us = $_POST['txtUsername'];
 		$pass = $_POST['txtPass'];
@@ -34,16 +36,49 @@
 		} else {
 			include_once("connectDB.php");
 			$pas = md5($pass);
-			$res = mysqli_query($Connect, "SELECT username, password FROM customer WHERE username='$us' AND password='$pas'")
+			$user = mysqli_query($Connect, "SELECT username, password FROM customer WHERE username='$us' AND password='$pas'")
 				or die(mysqli_error($Connect));
-			if (mysqli_num_rows($res) == 0) {
-				$_SESSION["admin"]= $row["state"];
-				echo '<meta http-equiv="refresh" content="0;URL =./admin/	index.php"/>';
-			}elseif(mysqli_num_rows($res) == 1){
-				$_SESSION["us"]=$us;
-				echo '<meta http-equiv="refresh" content="0;URL =?page=content"/>';
+			$admin = mysqli_query($Connect, "SELECT account, password FROM admin WHERE account='$us' AND password='$pas'")
+				or die(mysqli_error($Connect));
+			if (mysqli_num_rows($user) == 1) {
+				$_SESSION["us"] = $us;
+				echo "<script>
+				$(document).ready(function() { 
+				swal({
+					title: 'Success!',
+					text: 'Login successfully!',
+					icon: 'success',
+					button: 'OK',
+				}).then(function() {
+					window.location.href = '?page=content';
+				});
+				});
+			</script>";
+			} elseif (mysqli_num_rows($admin) == 1) {
+				$_SESSION["us"] = $us;
+				echo "<script>
+				$(document).ready(function() { 
+				swal({
+					title: 'Success!',
+					text: 'Login successfully!',
+					icon: 'success',
+					button: 'OK',
+				}).then(function() {
+					window.location.href = './admin/index.php';
+				});
+				});
+			</script>";
 			} else {
-				echo '<a style="color:#FF0000;">You loged in fail, please try again</a>';
+				echo "<script>
+				$(document).ready(function() { 
+				swal({
+					title: 'Fail!',
+					text: 'Incorrect account or password!',
+					icon: 'error',
+					button: 'OK',
+				})
+				});
+			</script>";
 			}
 		}
 	}
@@ -60,13 +95,29 @@
 					<label style="color:aliceblue">Username</label>
 				</div>
 				<div class="user-box">
-					<input type="password" name="txtPass" required="" id="txtPass value=">
+					<input type="password" name="txtPass" required="" id="txtPass" value="">
 					<label style="color:aliceblue">Password</label>
-
+					<span id="show-password" class="toggle-password" onclick="togglePassword()">
+						<i class="far fa-eye-slash"></i>
+					</span>
 				</div>
 				<button type="submit" name="btnLogin" class="button" id="btnLogin">Sign In</button>
 				<button type="button" name="btnCancel" class="button" id="btnCancel" onclick="window.location='?page=sign-up'">Sign Up </button>
 			</form>
 		</div>
 	</div>
+	<script>
+		function togglePassword() {
+			var passwordField = document.getElementById("txtPass");
+			var showPasswordButton = document.getElementById("show-password");
+
+			if (passwordField.type === "password") {
+				passwordField.type = "text";
+				showPasswordButton.innerHTML = '<i class="far fa-eye"></i>';
+			} else {
+				passwordField.type = "password";
+				showPasswordButton.innerHTML = '<i class="far fa-eye-slash"</i>';
+			}
+		}
+	</script>
 </body>

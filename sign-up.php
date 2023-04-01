@@ -10,16 +10,37 @@ if (isset($_POST['btnRegister'])) {
   $us = $_POST['txtUsername'];
   $pass1 = $_POST['txtPass1'];
   $pass2 = $_POST['txtPass2'];
-
   $err = "";
-  if ($us == "" || $pass1 == "") {
-    $err .= "<li>Enter fields with mark(*), please</li>";
-  }
+
   if (strlen($pass1) <= 5) {
-    $err .= "<li>Password must be greater than 5 chars</li>";
+    $err .= "";
+    echo "<script>
+    $(document).ready(function() { 
+    swal({
+      title: 'Error!',
+      text: 'Password must be greater than 5 chars!',
+      icon: 'error',
+      button: 'OK',
+    }).then(function() {
+      window.location.href = '?page=content';
+    });
+    });
+  </script>";
   }
   if ($pass1 != $pass2) {
-    $err .= "<li>Password and confirm password are the same</li>";
+    $err .= "";
+    echo "<script>
+    $(document).ready(function() { 
+    swal({
+      title: 'Error!',
+      text: 'Password and confirm password are the same!',
+      icon: 'error',
+      button: 'OK',
+    }).then(function() {
+      window.location.href = '?page=content';
+    });
+    });
+  </script>";
   }
   if ($err != "") {
     echo $err;
@@ -31,7 +52,18 @@ if (isset($_POST['btnRegister'])) {
     if (mysqli_num_rows($res) == 0) {
       mysqli_query($Connect, "INSERT INTO customer (UserName, Password, State)
              VALUES ('$us','$pass',0)") or die(mysqli_error($Connect));
-      echo "You have registered successfully";
+      echo "<script>
+      $(document).ready(function() { 
+      swal({
+        title: 'Success!',
+        text: 'Sign Up successfully!',
+        icon: 'success',
+        button: 'OK',
+      }).then(function() {
+        window.location.href = '?page=content';
+      });
+      });
+    </script>";
     } else {
       echo "Username already exists";
     }
@@ -48,7 +80,6 @@ if (isset($_POST['btnRegister'])) {
       </div>
       <div class="user-box">
         <input type="password" id="pwd" name="txtPass1" required="">
-        <!-- <i class="fa fa-eye" id="eye"></i> -->
         <label>Password</label>
       </div>
       <div class="user-box">

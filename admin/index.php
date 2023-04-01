@@ -32,7 +32,7 @@
 
 
       <!-- User Menu-->
-      <li><a class="app-nav__item" href="../?page=content"><i class='bx bx-log-out bx-rotate-180'></i> </a>
+      <li><a class="app-nav__item" href="../?page=logout"><i class='bx bx-log-out bx-rotate-180'></i> </a>
 
       </li>
     </ul>
@@ -40,12 +40,18 @@
   <!-- Sidebar menu-->
   <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
   <aside class="app-sidebar">
-    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="  " width="50px" alt="User Image">
+  <?php
+    if (isset($_SESSION['us']) && $_SESSION['us'] != "") {
+    ?>
+    <div class="app-sidebar__user">
       <div>
-        <p class="app-sidebar__user-name"><b>Admin</b></p>
+        <p class="app-sidebar__user-name"><b><?php echo $_SESSION['us']; ?></b></p>
         <p class="app-sidebar__user-designation">Welcome back</p>
       </div>
     </div>
+    <?php
+    }
+    ?>
     <hr>
     <ul class="app-menu">
       <li><a class="app-menu__item " href="?page=content"><i class='app-menu__icon bx bx-tachometer'></i><span class="app-menu__label">Dashboard</span></a></li>
@@ -64,9 +70,6 @@
     <?php
     if (isset($_GET['page'])) {
       $page = $_GET['page'];
-      if ($page == "content") {
-        include_once('content-admin.php');
-      }
       if ($page == "tdproduct") {
         include_once('table-data-product.php');
       }
