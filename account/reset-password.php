@@ -1,10 +1,22 @@
 <head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet" href="../css/custome.css">
+    <link rel="stylesheet" href="../css/styles1.css">
+    <link rel="stylesheet" href="../css/login.css">
+      <link rel="stylesheet" href="../css/icons/all.css">
+    <script src="../js/login.js"></script>
     <script>
-        function updateNotice() {
-            if (confirm("You have update successfully")) {
-                return true;
+        function togglePassword(passwordFieldID) {
+            var passwordField = document.getElementById(passwordFieldID);
+            var showPasswordButton = document.getElementById('show-' + passwordFieldID);
+
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                showPasswordButton.innerHTML = '<i class="far fa-eye"></i>';
             } else {
-                return false;
+                passwordField.type = "password";
+                showPasswordButton.innerHTML = '<i class="far fa-eye-slash"></i>';
             }
         }
     </script>
@@ -12,45 +24,52 @@
 <?php
 include_once("../connectDB.php");
 if (isset($_SESSION['us'])) {
-    $query = mysqli_query($Connect, "SELECT * from customer ");
+    $account = $_SESSION['us'];
+    $query = mysqli_query($Connect, "SELECT password from customer where username='$account' ");
     $row = mysqli_fetch_array($query);
 ?>
     <div class="container">
         <div class="login-box">
             <form method="post">
                 <div class="user-box">
-                    <input type="password" id="pwd" name="txtPass1" required="" value="">
-                    <label>Password</label>
+                    <input type="password" name="txtPass1" required="" id="txtPass" value="">
+                    <label style="color:aliceblue">Password</label>
+                    <span id="show-password1" class="toggle-password" onclick="togglePassword('txtPass')">
+                        <i class="far fa-eye-slash"></i>
+                    </span>
                 </div>
                 <div class="user-box">
-                    <input type="password" id="pwd" name="txtPass2" required="" value="">
-                    <label>Confirm Password</label>
+                    <input type="password" name="txtPass2" required="" id="txtPass2" value="">
+                    <label style="color:aliceblue">Confirm Password</label>
+                    <span id="show-password2" class="toggle-password" onclick="togglePassword('txtPass2')">
+                        <i class="far fa-eye-slash"></i>
+                    </span>
                 </div>
-                <div class=" user-box">
-                    <button type="submit" class="button" name="btnUpdate" id="btnUpdate" onclick="return updateNotice()">Update</button>
-                    <button type="button" class="button" name="btnIgnore" id="btnIgnore" onclick="window.location='?page=content'">Ignore</button>
+                <div class="user-box">
+                    <button type="submit" class="button" name="btnUpdate" id="btnUpdate">Update</button>
                 </div>
             </form>
         </div>
     </div>
 <?php
     if (isset($_POST['btnUpdate'])) {
-        include_once("ConnectDB.php");
-        $Username = $_POST['Username'];
-        $Cusname = $_POST['txtCustName'];
-        $Gender = $_POST['txtgender'];
-        $Address = $_POST['txtAddress'];
-        $telephone = $_POST['txttelephone'];
-        $email = $_POST['txtEmail'];
-        $CusDate = $_POST['slDate'];
-        $CusMonth = $_POST['slMonth'];
-        $CusYear = $_POST['slYear'];
+        $pass = $_POST['txtPass1'];
+        $pas = md5($pass);
 
-        $query  = "UPDATE customer SET  customername ='$Cusname', 
-                gender ='$Gender', address='$Address', phone='$telephone', 
-                email='$email', day='$CusDate', month='$CusMonth', year='$CusYear' where username ='$account'";
+        $query  = "UPDATE customer SET  password ='$pas' where username ='$account'";
         $result = mysqli_query($Connect, $query) or die(mysqli_error($Connect));
-        echo '<meta http-equiv="refresh" content="0;URL =?page=profile"';
+        echo "<script>
+        $(document).ready(function() { 
+        swal({
+          title: 'Success!',
+          text: 'Update password success!',
+          icon: 'success',
+          button: 'OK',
+        }).then(function() {
+          window.location.href = '?page=reps';
+        });
+        });
+        </script>";
     }
 }
 ?>

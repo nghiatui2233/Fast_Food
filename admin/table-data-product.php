@@ -61,7 +61,6 @@
                                                 <span class='badge bg-danger'>Out of stock</span>
                                             <?php } ?>
                                         </td>
-
                                         <td><?php echo $row["category_name"] ?></td>
                                         <td>$ <?php echo $row["price"] ?></td>
                                         <td><img src='img/<?php echo $row["image"] ?>' alt='' width='100px;' height='60px'>

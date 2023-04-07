@@ -13,9 +13,9 @@
 
     // Trả về kết quả cho client
     if ($result) {
-      echo "Product deleted successfully";
+      echo "Deleted successfully";
     } else {
-      echo "Error deleting product";
+      echo "Error deleting ";
     }
   }
 ?>

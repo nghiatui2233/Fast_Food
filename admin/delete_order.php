@@ -1,11 +1,11 @@
 <?php
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $categoryid = $_POST["categoryid"];
+    $orderid = $_POST["orderid"];
 
     include_once("connectDBadmin.php");
 
     // Xoá sản phẩm từ database
-    $sql = "DELETE FROM category WHERE category_id = '$categoryid'";
+    $sql = "DELETE FROM orders WHERE order_id = '$orderid'";
     $result = mysqli_query($Connect, $sql);
 
     // Đóng kết nối đến database

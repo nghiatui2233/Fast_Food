@@ -6,16 +6,6 @@
 	<link rel="stylesheet" href="./css/login.css">
 	<script src="js/login.js"></script>
 </head>
-<script>
-	function process() {
-		n = document.getElementById("txtUsername");
-		pass = document.getElementById("txtPass");
-		if (us.value == "") {
-			alert("Enter Username please");
-			return false;
-		}
-	}
-</script>
 
 <body>
 	<?php
@@ -60,7 +50,7 @@
 				$(document).ready(function() { 
 				swal({
 					title: 'Success!',
-					text: 'Login successfully!',
+					text: 'Welcome back admin!',
 					icon: 'success',
 					button: 'OK',
 				}).then(function() {

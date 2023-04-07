@@ -16,31 +16,9 @@
         <?php
         include 'header.php';
         ?>
-        <?php
-        if (isset($_GET["function"]) == "del") {
-            if (isset($_GET["id"])) {
-                $id = $_GET["id"];
-                if (isset($_SESSION['cart'])) {
-                    unset($_SESSION['cart'][$id]);
-                }
-
-                echo '<meta http-equiv="refresh" content="0; URL=?page=cart"/>';
-            }
-        }
-        ?>
-        <?php if (isset($_GET["function1"]) == "delc") {
-            if (isset($_GET["id"])) {
-                $id = $_GET["id"];
-                if (isset($_SESSION['cart'])) {
-                    unset($_SESSION['cart']);
-                }
-
-                echo '<meta http-equiv="refresh" content="0; URL=?page=cart"/>';
-            }
-        } ?>
         <div class="order1">
             <div class="order-list">
-                <h3>Order Summary</h3>
+                <h3>Order of <?php echo $_SESSION["us"] ?></h3>
                 <hr>
                 <div class="order-inner">
                     <?php
@@ -53,10 +31,10 @@
                             <div class="order-item">
                                 <div class="details"><img src="<?php echo $value['img'] ?>">
                                     <div class="detail-item">
-                                        <h5 style="margin-bottom:10px"><?php echo $value['name'] ?></h5><a class="btn-sm min" href="javascript:void(0)" onclick="btnMinusOrder(event)"></a><small> <?php echo $value['quantity'] ?></small><a class="btn-sm max" href="javascript:void(0)" onclick="btnPlusOrder(event)"></a><a class="remove" href="?page=cart&&function=del&&id=<?php echo $key; ?>">delete</a>
+                                        <h5 style="margin-bottom:10px"><?php echo $value['name'] ?></h5><small> <?php echo $value['quantity'] ?></small>
                                     </div>
                                 </div>
-                                <h2 class="price"> $<?php echo $item_price ?></h2>
+                                <h2 class="price" style="color: aliceblue;"> $<?php echo $item_price ?></h2>
 
                             </div>
                     <?php
@@ -85,11 +63,26 @@
                 </div>
                 <div class="checkout-detail">
                     <form action="payment.php" method="POST">
-                        <input type="hidden" name="amount" value="<?php echo $gtotal = $total * 1.05; ?>"></input>
+                        <input type="hidden" name="amount" value="<?php echo $gtotal = $total * 1.05; ?>">
                         <button class="btn-md fill" name="redirect" id="redirect">Checkout</button>
                     </form>
-                    <button type="button" onclick="window.location='?page=content'" class="btn-md fill">Back</button>
+                    <form method="POST" action="">
+                        <input type="hidden" name="username" value="<?php echo $_SESSION["us"] ?>">
+                        <button type="submit" name="removeOrder" class="btn-md fill">Back</button>
+                    </form>
+
                 </div>
             </div>
         </div>
     </div>
+</div>
+<?php
+if (isset($_POST['removeOrder'])) {
+    $username = $_POST['username'];
+    $delete_sql = "DELETE FROM orders WHERE username = '$username'";
+    if (mysqli_query($Connect, $delete_sql)) {
+        echo '<meta http-equiv="refresh" content="0;URL =?page=content"';
+    }
+    unset($_SESSION['cart']);
+}
+?>

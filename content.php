@@ -108,46 +108,62 @@
             }
             if (isset($_POST['btnCart'])) {
                 // Lấy thông tin sản phẩm từ form POST
-                if (isset($_SESSION["us"])) {
-                    $username = $_SESSION['us'];
-                    $product_id = $_POST['product_id'];
-                    $product_img = $_POST['img'];
-                    $price = $_POST['price'];
-                    $quantity = 1;
+                if (!isset($_SESSION["us"])) {
+                    echo "<script>
+                        $(document).ready(function() { 
+                        swal({
+                            title: 'Wait!',
+                            text: 'You must be logged in to pay!',
+                            icon: 'warning',
+                            button: 'OK',
+                        }).then(function() {
+                            window.location.href = '?page=sign-in';
+                        });
+                        });
+                    </script>";
+                    exit();
+                } else {
+                    if (isset($_SESSION["us"])) {
+                        $username = $_SESSION['us'];
+                        $product_id = $_POST['product_id'];
+                        $product_name = $_POST['name'];
+                        $product_img = $_POST['img'];
+                        $price = $_POST['price'];
+                        $quantity = 1;
 
-                    // Tạo truy vấn để lưu đơn hàng vào cơ sở dữ liệu
-                    mysqli_query($Connect, "INSERT INTO cart(product_id,username,quantity, price,image) 
-                VALUES ('$product_id','$username','$quantity', '$price','$product_img')");
-                    $product = array(
-                        'id' => $_POST['product_id'],
-                        'img' => $_POST['img'],
-                        'name' => $_POST['name'],
-                        'price' => $_POST['price'],
-                        'quantity' => 1
-                    );
-                }
-
-                // Kiểm tra xem giỏ hàng đã được khởi tạo hay chưa
-                if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
-                    // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
-                    $found = false;
-                    foreach ($_SESSION['cart'] as &$item) {
-                        if ($item['name'] == $product['name']) {
-                            // Nếu sản phẩm đã có trong giỏ hàng, tăng số lượng lên 1
-                            $item['quantity']++;
-                            $found = true;
-                            break;
-                        }
+                        // Tạo truy vấn để lưu đơn hàng vào cơ sở dữ liệu
+                        mysqli_query($Connect, "INSERT INTO cart(product_id,name,username,quantity, price,image) 
+                VALUES ('$product_id','$product_name','$username','$quantity', '$price','$product_img')");
+                        $product = array(
+                            'id' => $product_id,
+                            'img' => $product_img,
+                            'name' => $product_name,
+                            'price' => $price,
+                            'quantity' => $quantity
+                        );
                     }
-                    if (!$found) {
-                        // Nếu sản phẩm chưa có trong giỏ hàng, thêm sản phẩm mới vào giỏ hàng
+
+                    // Kiểm tra xem giỏ hàng đã được khởi tạo hay chưa
+                    if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
+                        // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+                        $found = false;
+                        foreach ($_SESSION['cart'] as &$item) {
+                            if ($item['name'] == $product['name']) {
+                                // Nếu sản phẩm đã có trong giỏ hàng, tăng số lượng lên 1
+                                $item['quantity']++;
+                                $found = true;
+                                break;
+                            }
+                        }
+                        if (!$found) {
+                            // Nếu sản phẩm chưa có trong giỏ hàng, thêm sản phẩm mới vào giỏ hàng
+                            $_SESSION['cart'][] = $product;
+                        }
+                    } else {
+                        // Nếu giỏ hàng chưa được khởi tạo, thêm sản phẩm vào giỏ hàng
                         $_SESSION['cart'][] = $product;
                     }
-                } else {
-                    // Nếu giỏ hàng chưa được khởi tạo, thêm sản phẩm vào giỏ hàng
-                    $_SESSION['cart'][] = $product;
                 }
-                // echo "<script> alert(' Add to cart successful ');location.href='?page=cart';</script>";
             }
             ?>
         </div>
@@ -166,11 +182,11 @@
             }
         }
         ?>
-        <?php if (isset($_GET["function1"]) == "delc") {
+        <?php if (isset($_GET["action"]) == "up") {
             if (isset($_GET["id"])) {
                 $id = $_GET["id"];
                 if (isset($_SESSION['cart'])) {
-                    unset($_SESSION['cart']);
+                    $quantity = $_POST['quantity'];
                 }
 
                 echo '<meta http-equiv="refresh" content="0; URL=?page=content"/>';
@@ -192,8 +208,11 @@
                             <div class="order-item">
                                 <div class="details"><img src="<?php echo $value['img'] ?>">
                                     <div class="detail-item">
-
-                                        <h5 style="margin-bottom:10px"><?php echo $value['name'] ?></h5><a class="btn-sm min" href="javascript:void(0)" onclick="btnMinusOrder(event)"></a><small> <?php echo $value['quantity'] ?></small><a class="btn-sm max" href="javascript:void(0)" onclick="btnPlusOrder(event)"></a><a class="remove" href="?page=content&&function=del&&id=<?php echo $key; ?>">delete</a>
+                                        <h5 style="margin-bottom:10px"><?php echo $value['name'] ?></h5>
+                                        <a class="btn-sm min"></a>
+                                        <small id="quantity_<?php echo $key ?>"><?php echo $value['quantity'] ?></small>
+                                        <a class="btn-sm max"></a>
+                                        <a class="remove" href="?page=content&&function=del&&id=<?php echo $key; ?>">delete</a>
                                     </div>
                                 </div>
                                 <h2 class="price"> $<?php echo $item_price ?></h2>
@@ -268,47 +287,33 @@
     <?php
     include_once("connectDB.php");
     if (isset($_POST['addOrder'])) {
-        if (!isset($_SESSION["us"])) {
-            echo "<script>
-                $(document).ready(function() { 
-                swal({
-                    title: 'Wait!',
-                    text: 'You must be logged in to pay!',
-                    icon: 'warning',
-                    button: 'OK',
-                }).then(function() {
-                    window.location.href = '?page=sign-in';
-                });
-                });
-            </script>";
-            exit();
-        } else { // Lấy thông tin giỏ hàng từ cơ sở dữ liệu
-            $sql = "SELECT * FROM cart";
-            $result = mysqli_query($Connect, $sql);
+        $id_random = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 2) . rand(1000, 9999);
+        // Lấy thông tin giỏ hàng từ cơ sở dữ liệu
+        $sql = "SELECT * FROM cart";
+        $result = mysqli_query($Connect, $sql);
 
-            // Lưu thông tin giỏ hàng vào bảng orders
-            while ($row = mysqli_fetch_assoc($result)) {
-                $id = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 2) . rand(1000, 9999);
-                $product_id = $row['product_id'];
-                $username = $row['username'];
-                $quantity = $row['quantity'];
-                $price = $row['price'];
-                $total_price = $gtotal;
+        // Lưu thông tin giỏ hàng vào bảng orders
+        while ($row = mysqli_fetch_assoc($result)) {
+            $id = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 2) . rand(1000, 9999);
+            $id_order = $id_random;
+            $product_id = $row['product_id'];
+            $username = $row['username'];
+            $quantity = $row['quantity'];
+            $price = $row['price'];
+            $total_price = $gtotal;
 
-                $order_sql = "INSERT INTO orders (order_id,product_id,username ,quantity, price, total_price) VALUES ('$id','$product_id','$username' ,'$quantity', '$price', '$total_price')";
+            $order_sql = "INSERT INTO orders (order_id,id_order,product_id,username ,quantity, price, total_price) VALUES ('$id','$id_order','$product_id','$username' ,'$quantity', '$price', '$total_price')";
 
-                if (mysqli_query($Connect, $order_sql)) {
-                    echo '<meta http-equiv="refresh" content="0;URL =?page=cart"';
-                } else {
-                    echo "Lỗi: " . $order_sql . "<br>" . mysqli_error($Connect);
-                }
+            if (mysqli_query($Connect, $order_sql)) {
+                echo '<meta http-equiv="refresh" content="0;URL =?page=cart"';
+            } else {
+                echo "Lỗi: " . $order_sql . "<br>" . mysqli_error($Connect);
             }
-
-            // Xóa thông tin giỏ hàng sau khi lưu vào bảng orders
-            $delete_sql = "DELETE FROM cart";
-            mysqli_query($Connect, $delete_sql);
         }
+
+        // Xóa thông tin giỏ hàng sau khi lưu vào bảng orders
+        $delete_sql = "DELETE FROM cart";
+        mysqli_query($Connect, $delete_sql);
     }
     ?>
-</div>
 </div>

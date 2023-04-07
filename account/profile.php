@@ -1,4 +1,16 @@
 <head>
+  <meta charset="UTF-8">
+  <title>Account</title>
+  <link rel="stylesheet" href="../css/custome.css">
+  <link rel="stylesheet" href="../css/styles1.css">
+  <link rel="stylesheet" href="../css/profile.css">
+  <link rel="stylesheet" href="../css/icons/all.css">
+  <!-- Link to jQuery library -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Link to SweetAlert library -->
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="../js/login.js"></script>
+
     <script>
         function updateNotice() {
             if (confirm("You have update successfully")) {
@@ -103,7 +115,6 @@ if (isset($_SESSION['us'])) {
     </div>
 <?php
     if (isset($_POST['btnUpdate'])) {
-        include_once("ConnectDB.php");
         $Username = $_POST['Username'];
         $Cusname = $_POST['txtCustName'];
         $Gender = $_POST['txtgender'];
@@ -118,7 +129,18 @@ if (isset($_SESSION['us'])) {
                 gender ='$Gender', address='$Address', phone='$telephone', 
                 email='$email', day='$CusDate', month='$CusMonth', year='$CusYear' where username ='$account'";
         $result = mysqli_query($Connect, $query) or die(mysqli_error($Connect));
-        echo '<meta http-equiv="refresh" content="0;URL =?page=profile"';
+        echo "<script>
+        $(document).ready(function() { 
+        swal({
+          title: 'Success!',
+          text: 'Update profile success!',
+          icon: 'success',
+          button: 'OK',
+        }).then(function() {
+          window.location.href = '?page=pf';
+        });
+        });
+        </script>";
     }
 }
 ?>

@@ -40,15 +40,15 @@
   <!-- Sidebar menu-->
   <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
   <aside class="app-sidebar">
-  <?php
+    <?php
     if (isset($_SESSION['us']) && $_SESSION['us'] != "") {
     ?>
-    <div class="app-sidebar__user">
-      <div>
-        <p class="app-sidebar__user-name"><b><?php echo $_SESSION['us']; ?></b></p>
-        <p class="app-sidebar__user-designation">Welcome back</p>
+      <div class="app-sidebar__user">
+        <div>
+          <p class="app-sidebar__user-name"><b><?php echo $_SESSION['us']; ?></b></p>
+          <p class="app-sidebar__user-designation">Welcome back</p>
+        </div>
       </div>
-    </div>
     <?php
     }
     ?>
@@ -59,7 +59,7 @@
       <li><a class="app-menu__item" href="?page=cus"><i class='app-menu__icon bx bx-user-voice'></i><span class="app-menu__label">Customer Management</span></a></li>
       <li><a class="app-menu__item" href="?page=tdproduct"><i class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Product Management</span></a></li>
       <li><a class="app-menu__item" href="?page=tdcat"><i class='app-menu__icon fas fa-solid fa-layer-group'></i><span class="app-menu__label">Category Management</span></a></li>
-      <li><a class="app-menu__item" href="table-data-oder.html"><i class='app-menu__icon bx bx-task'></i><span class="app-menu__label">Order Management</span></a></li>
+      <li><a class="app-menu__item" href="?page=order"><i class='app-menu__icon bx bx-task'></i><span class="app-menu__label">Order Management</span></a></li>
       <li><a class="app-menu__item" href="internal-management.html"><i class='app-menu__icon bx bx-run'></i><span class="app-menu__label">Internal Management</span></a></li>
       <li><a class="app-menu__item" href="table-data-money.html"><i class='app-menu__icon bx bx-dollar'></i><span class="app-menu__label">Salary Statement</span></a></li>
       <li><a class="app-menu__item" href="quan-ly-bao-cao.html"><i class='app-menu__icon bx bx-pie-chart-alt-2'></i><span class="app-menu__label">Sales Report</span></a>
@@ -91,8 +91,14 @@
       if ($page == "cus") {
         include_once('table-data-customer.php');
       }
+      if ($page == "order") {
+        include_once('table-data-order.php');
+      }
       if ($page == "logout") {
         include_once('logout.php');
+      }
+      if ($page == "content") {
+      include_once("content-admin.php");
       }
     } else {
       include_once("content-admin.php");
