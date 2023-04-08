@@ -1,11 +1,11 @@
 <?php
-include_once("connectDBadmin.php");
+include_once("../connectDB.php");
 
 if(isset($_POST['order_id'])) {
   $order_id = $_POST['order_id'];
 
   // Update the order status to "Confirmed" (status code 2)
-  $sql = "UPDATE orders SET status = 1 WHERE order_id = '$order_id'";
+  $sql = "UPDATE orders SET status = 3 WHERE order_id = '$order_id'";
   $result = mysqli_query($Connect, $sql);
 
   if($result) {
@@ -16,3 +16,4 @@ if(isset($_POST['order_id'])) {
 } else {
   echo "No order ID specified.";
 }
+

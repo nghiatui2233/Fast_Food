@@ -12,21 +12,7 @@
                     <div class="tile-body">
                         <div class="row element-button">
                             <div class="col-sm-2">
-
                                 <a class="btn btn-add btn-sm" href="?page=addproduct" title="Add"><i class="fas fa-plus"></i>Create New Product</a>
-                            </div>
-                            <div class="col-sm-2">
-                                <a class="btn btn-delete btn-sm upload-file" type="button" title="Post"><i class="fas fa-file-upload"></i> Upload file</a>
-                            </div>
-                            <div class="col-sm-2">
-                                <a class="btn btn-excel btn-sm" href="" title="Export"><i class="fas fa-file-excel"></i>
-                                    Export Excel</a>
-                            </div>
-                            <div class="col-sm-2">
-                                <a class="btn btn-delete btn-sm pdf-file" type="button" title="Export"><i class="fas fa-file-pdf"></i> Export PDF</a>
-                            </div>
-                            <div class="col-sm-2">
-                                <a class="btn btn-delete btn-sm" type="button" title="Deleted"><i class="fas fa-trash-alt"></i> Deleted All </a>
                             </div>
                         </div>
                         <table class="table table-hover table-bordered" id="sampleTable">

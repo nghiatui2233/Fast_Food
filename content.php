@@ -59,7 +59,6 @@
                             while ($row = mysqli_fetch_array($result2)) {
                         ?>
                                 <div class="menu " data-menu="beef-burg">
-                                    <h2 class="price"><?php echo $row["product_id"] ?></h2>
                                     <img src='admin/img/<?php echo $row["image"] ?>' alt=''>
                                     <h2 class="price">$ <?php echo $row["price"] ?></h2>
                                     <div class="desc-item">
@@ -67,7 +66,7 @@
                                         <p><?php echo $row["description"] ?></p>
                                     </div>
                                     <form method="POST">
-                                        <input type="hidden" name="id" value="<?php echo $row["product_id"] ?>">
+                                        <input type="hidden" name="product_id" value="<?php echo $row["product_id"] ?>">
                                         <input type="hidden" name="img" value="admin/img/<?php echo $row["image"] ?>">
                                         <input type="hidden" name="name" value="<?php echo $row["name"] ?>">
                                         <input type="hidden" name="price" value="<?php echo $row["price"] ?>">
@@ -131,13 +130,11 @@
                         $price = $_POST['price'];
                         $quantity = 1;
 
-                        // Tạo truy vấn để lưu đơn hàng vào cơ sở dữ liệu
-                        mysqli_query($Connect, "INSERT INTO cart(product_id,name,username,quantity, price,image) 
-                VALUES ('$product_id','$product_name','$username','$quantity', '$price','$product_img')");
                         $product = array(
                             'id' => $product_id,
                             'img' => $product_img,
                             'name' => $product_name,
+                            'username' => $username,
                             'price' => $price,
                             'quantity' => $quantity
                         );
@@ -275,6 +272,7 @@
             <form action="" method="POST">
                 <input type="hidden" name="id" value="<?php echo $value['id'] ?>"></input>
                 <input type="hidden" name="name" value="<?php echo $value['name'] ?>"></input>
+                <input type="hidden" name="username" value="<?php echo $value['username'] ?>"></input>
                 <input type="hidden" name="quantity" value="<?php echo $value['quantity'] ?>"></input>
                 <input type="hidden" name="price" value="<?php echo $item_price; ?>"></input>
                 <input type="hidden" name="total_tax" value="<?php echo $gtotal = $total * 1.05; ?>"></input>
@@ -286,34 +284,33 @@
     <!-- End Checkout Detail -->
     <?php
     include_once("connectDB.php");
+
     if (isset($_POST['addOrder'])) {
-        $id_random = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 2) . rand(1000, 9999);
-        // Lấy thông tin giỏ hàng từ cơ sở dữ liệu
-        $sql = "SELECT * FROM cart";
-        $result = mysqli_query($Connect, $sql);
+        $username = $_POST['username'];
+        $cartItems = $_SESSION['cart'];
+        $totalPrice = $_POST['total_tax'];;
+        $id = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 2) . rand(1000, 9999);
 
-        // Lưu thông tin giỏ hàng vào bảng orders
-        while ($row = mysqli_fetch_assoc($result)) {
-            $id = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 2) . rand(1000, 9999);
-            $id_order = $id_random;
-            $product_id = $row['product_id'];
-            $username = $row['username'];
-            $quantity = $row['quantity'];
-            $price = $row['price'];
-            $total_price = $gtotal;
+        // Thêm đơn hàng vào database
+        $sql = "INSERT INTO orders (order_id,username, total_price,status) VALUES ('$id','$username', '$totalPrice','0')";
+        mysqli_query($Connect, $sql);
 
-            $order_sql = "INSERT INTO orders (order_id,id_order,product_id,username ,quantity, price, total_price) VALUES ('$id','$id_order','$product_id','$username' ,'$quantity', '$price', '$total_price')";
+        // Thêm chi tiết đơn hàng vào database
+        foreach ($_SESSION['cart'] as $item) {
+            $order_detal_id = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 2) . rand(1000, 9999);;
+            $product_id = $item['id'];
+            $username = $item['username'];
+            $quantity = $item['quantity'];
+            $price = $item['price'];
+            $total_item_price = $quantity * $price;
 
-            if (mysqli_query($Connect, $order_sql)) {
-                echo '<meta http-equiv="refresh" content="0;URL =?page=cart"';
-            } else {
-                echo "Lỗi: " . $order_sql . "<br>" . mysqli_error($Connect);
-            }
+            $sql = "INSERT INTO order_details (order_detail_id,order_id, product_id, quantity, price, total_price,username) 
+                VALUES ('$order_detal_id','$id', '$product_id', '$quantity', '$price', '$total_item_price','$username')";
+            mysqli_query($Connect, $sql);
         }
-
-        // Xóa thông tin giỏ hàng sau khi lưu vào bảng orders
-        $delete_sql = "DELETE FROM cart";
-        mysqli_query($Connect, $delete_sql);
+        // Chuyển hướng về trang thông báo đặt hàng thành công
+        echo '<meta http-equiv="refresh" content="0; URL=?page=cart"/>';
     }
     ?>
+
 </div>

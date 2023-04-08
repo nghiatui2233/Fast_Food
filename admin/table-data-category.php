@@ -6,53 +6,52 @@
       </ul>
       <div id="clock"></div>
     </div>
-
     <div class="row">
       <div class="col-md-12">
         <div class="tile">
           <div class="tile-body">
-
             <div class="row element-button">
               <div class="col-sm-2">
                 <a class="btn btn-add btn-sm" href="?page=addcat" title="Add"><i class="fas fa-plus"></i>Create New Category</a>
               </div>
-              <table class="table table-hover table-bordered js-copytextarea" cellpadding="0" cellspacing="0" border="0" id="sampleTable">
-                <thead>
-                  <tr>
-                    <th width="10"><input type="checkbox" id="all"></th>
-                    <th width="100">Category ID</th>
-                    <th width="150">Category Name</th>
-                    <th width="150">Icon</th>
-                    <th width="10" class="text-center">Edit</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php
-                  $sql = "SELECT *FROM category";
-
-                  $result = mysqli_query($Connect, $sql);
-                  while ($row = mysqli_fetch_array($result)) {
-                  ?>
-                    <tr>
-                      <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                      <td>#<?php echo $row["category_id"] ?></td>
-                      <td><?php echo $row["category_name"] ?></td>
-                      <td style="text-align: center"><i class="fas <?php echo $row["icon"] ?>" style="font-size:48px;margin-bottom:6px;"></i></td>
-                      <td class="text-center">
-                      <button class='btn btn-primary btn-sm trash' onclick='deleteCategory( "<?php echo urlencode($row["category_id"]); ?>" )' type='button' title='Delete'><i class='fas fa-trash-alt'></i></button>
-                        <button class="btn btn-primary btn-sm edit" type="button" onclick="window.location='?page=editcat&&id=<?php echo $row['category_id'] ?>'"><i class="fas fa-edit"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  <?php
-                  }
-                  ?>
-                </tbody>
-              </table>
             </div>
+            <table class="table table-hover table-bordered js-copytextarea" cellpadding="0" cellspacing="0" border="0" id="sampleTable">
+              <thead>
+                <tr>
+                  <th width="10"><input type="checkbox" id="all"></th>
+                  <th width="100">Category ID</th>
+                  <th width="150">Category Name</th>
+                  <th width="150">Icon</th>
+                  <th width="10" class="text-center">Edit</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php
+                $sql = "SELECT *FROM category";
+
+                $result = mysqli_query($Connect, $sql);
+                while ($row = mysqli_fetch_array($result)) {
+                ?>
+                  <tr>
+                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
+                    <td>#<?php echo $row["category_id"] ?></td>
+                    <td><?php echo $row["category_name"] ?></td>
+                    <td style="text-align: center"><i class="fas <?php echo $row["icon"] ?>" style="font-size:48px;margin-bottom:6px;"></i></td>
+                    <td class="text-center">
+                      <button class='btn btn-primary btn-sm trash' onclick='deleteCategory( "<?php echo urlencode($row["category_id"]); ?>" )' type='button' title='Delete'><i class='fas fa-trash-alt'></i></button>
+                      <button class="btn btn-primary btn-sm edit" type="button" onclick="window.location='?page=editcat&&id=<?php echo $row['category_id'] ?>'"><i class="fas fa-edit"></i>
+                      </button>
+                    </td>
+                  </tr>
+                <?php
+                }
+                ?>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
+    </div>
   </main>
 
   <!--

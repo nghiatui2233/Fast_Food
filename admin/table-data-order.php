@@ -49,20 +49,25 @@
               <tbody>
                 <?php
                 include_once("connectDBadmin.php");
-                $sql = "SELECT o.*, p.name, c.CustomerName FROM orders o, product p, customer c WHERE o.product_id = p.product_id AND o.username = c.username";
+                $sql = "SELECT o.*, p.name, c.CustomerName, od.* 
+                FROM order_details od
+                JOIN product p ON od.product_id = p.product_id
+                JOIN customer c ON od.username = c.username
+                JOIN orders o ON o.order_id = od.order_id
+                ORDER BY o.date_buy DESC";
                 $result = mysqli_query($Connect, $sql);
                 while ($row = mysqli_fetch_array($result)) {
                 ?>
                   <tr>
                     <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                    <td><?php echo $row["id_order"]; ?></td>
+                    <td><?php echo $row["order_id"]; ?></td>
                     <td><?php echo $row["CustomerName"]; ?></td>
                     <td><?php echo $row["username"]; ?></td>
                     <td><?php echo $row["name"]; ?></td>
                     <td><?php echo $row["quantity"]; ?></td>
                     <td>$<?php echo $row["total_price"]; ?></td>
                     <td> <?php if ($row['status'] == 0) { ?>
-                        <span class='badge bg-info confirm-order' data-orderid='<?php echo $row["id_order"]; ?>'>Waiting for progressing</span>
+                        <span class='badge bg-info confirm-order' data-orderid='<?php echo $row["order_id"]; ?>'>Waiting for progressing</span>
                       <?php } elseif ($row['status'] == 1) { ?>
                         <span class='badge bg-warning'>Being transported</span>
                       <?php } elseif ($row['status'] == 2) { ?>
@@ -149,19 +154,35 @@
     $(document).ready(function() {
       $('.confirm-order').on('click', function() {
         var orderId = $(this).data('orderid');
-        if (confirm('Are you sure to confirm this order?')) {
-          $.ajax({
-            url: 'confirm_order.php',
-            method: 'POST',
-            data: {
-              id_order: orderId 
-            },
-            success: function(data) {
-              alert(data);
-              location.reload();
-            }
-          });
-        }
+        swal({
+          title: "Confirmation",
+          text: "Are you sure to confirm this order?",
+          icon: "warning",
+          buttons: ["Cancel", "Confirm"],
+          dangerMode: true,
+        }).then((willConfirm) => {
+          if (willConfirm) {
+            $.ajax({
+              url: 'confirm_order.php',
+              method: 'POST',
+              data: {
+                order_id: orderId
+              },
+              success: function(data) {
+                swal({
+                  title: "Success!",
+                  text: data,
+                  icon: "success",
+                }).then(() => {
+                  location.reload();
+                });
+              },
+              error: function(xhr, status, error) {
+                console.log(xhr.responseText);
+              }
+            });
+          }
+        });
       });
     });
   </script>

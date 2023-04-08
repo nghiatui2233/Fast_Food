@@ -13,10 +13,10 @@
                     <h1 style="color: azure;">Thank you so much for trusting us!</h1>
                     <?php
                     include_once("connectDB.php");
-                    $sql = "SELECT o.*, p.name 
-                    FROM orders o 
-                    JOIN product p 
-                    ON o.product_id = p.product_id";
+                    $sql = "SELECT DATE(MAX(date_buy)) as order_date, total_price, username
+                    FROM orders
+                    GROUP BY DATE(date_buy) AND username
+                     ";
 
                     $result = mysqli_query($Connect, $sql);
                     $row = mysqli_fetch_array($result)

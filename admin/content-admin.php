@@ -98,10 +98,10 @@
       $date_from = $_POST['date_from'];
       $date_to = $_POST['date_to'];
       // truy vấn đơn hàng trong khoảng thời gian đã chọn
-      $query = "SELECT * FROM orders WHERE date_buy BETWEEN '$date_from' AND '$date_to'";
+      $query = "SELECT od.*, o.status FROM order_details od, orders o WHERE od.date_buy BETWEEN '$date_from' AND '$date_to' AND od.order_id= o.order_id AND o.status != 3";
     } else {
       // truy vấn tất cả các đơn hàng
-      $query = "SELECT * FROM orders";
+      $query = "SELECT od.*, o.status FROM order_details od, orders o Where o.status != 3 AND od.order_id= o.order_id";
     }
 
     $result = mysqli_query($Connect, $query);

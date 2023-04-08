@@ -64,7 +64,7 @@
                 <div class="checkout-detail">
                     <form action="payment.php" method="POST">
                         <input type="hidden" name="amount" value="<?php echo $gtotal = $total * 1.05; ?>">
-                        <button class="btn-md fill" name="redirect" id="redirect">Checkout</button>
+                        <button class="btn-md fill" name="redirect" id="redirect">Payment</button>
                     </form>
                     <form method="POST" action="">
                         <input type="hidden" name="username" value="<?php echo $_SESSION["us"] ?>">
@@ -80,9 +80,10 @@
 if (isset($_POST['removeOrder'])) {
     $username = $_POST['username'];
     $delete_sql = "DELETE FROM orders WHERE username = '$username'";
-    if (mysqli_query($Connect, $delete_sql)) {
-        echo '<meta http-equiv="refresh" content="0;URL =?page=content"';
-    }
+    $delete_sql1 = "DELETE FROM order_details WHERE username = '$username'";
+    mysqli_query($Connect, $delete_sql);
+    mysqli_query($Connect, $delete_sql1);
+    echo '<meta http-equiv="refresh" content="0;URL =?page=content"';
     unset($_SESSION['cart']);
 }
 ?>
