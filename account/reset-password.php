@@ -13,10 +13,10 @@
 
             if (passwordField.type === "password") {
                 passwordField.type = "text";
-                showPasswordButton.innerHTML = '<i class="far fa-eye"></i>';
+                showPasswordButton.innerHTML = '<i class="fas fa-eye"></i>';
             } else {
                 passwordField.type = "password";
-                showPasswordButton.innerHTML = '<i class="far fa-eye-slash"></i>';
+                showPasswordButton.innerHTML = '<i class="fab fa-eye-slash"></i>';
             }
         }
     </script>
@@ -35,14 +35,14 @@ if (isset($_SESSION['us'])) {
                     <input type="password" name="txtPass1" required="" id="txtPass" value="">
                     <label style="color:aliceblue">Password</label>
                     <span id="show-password1" class="toggle-password" onclick="togglePassword('txtPass')">
-                        <i class="far fa-eye-slash"></i>
+                        <i class="fab fa-eye-slash"></i>
                     </span>
                 </div>
                 <div class="user-box">
                     <input type="password" name="txtPass2" required="" id="txtPass2" value="">
                     <label style="color:aliceblue">Confirm Password</label>
                     <span id="show-password2" class="toggle-password" onclick="togglePassword('txtPass2')">
-                        <i class="far fa-eye-slash"></i>
+                        <i class="fab fa-eye-slash"></i>
                     </span>
                 </div>
                 <div class="user-box">

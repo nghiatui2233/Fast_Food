@@ -164,6 +164,7 @@
             }
             ?>
         </div>
+
         <!-- End Main Menu -->
         <?php
 
@@ -281,36 +282,37 @@
         </div>
         </div>
     </div>
-    <!-- End Checkout Detail -->
-    <?php
-    include_once("connectDB.php");
-
-    if (isset($_POST['addOrder'])) {
-        $username = $_POST['username'];
-        $cartItems = $_SESSION['cart'];
-        $totalPrice = $_POST['total_tax'];;
-        $id = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 2) . rand(1000, 9999);
-
-        // Thêm đơn hàng vào database
-        $sql = "INSERT INTO orders (order_id,username, total_price,status) VALUES ('$id','$username', '$totalPrice','0')";
-        mysqli_query($Connect, $sql);
-
-        // Thêm chi tiết đơn hàng vào database
-        foreach ($_SESSION['cart'] as $item) {
-            $order_detal_id = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 2) . rand(1000, 9999);;
-            $product_id = $item['id'];
-            $username = $item['username'];
-            $quantity = $item['quantity'];
-            $price = $item['price'];
-            $total_item_price = $quantity * $price;
-
-            $sql = "INSERT INTO order_details (order_detail_id,order_id, product_id, quantity, price, total_price,username) 
-                VALUES ('$order_detal_id','$id', '$product_id', '$quantity', '$price', '$total_item_price','$username')";
-            mysqli_query($Connect, $sql);
-        }
-        // Chuyển hướng về trang thông báo đặt hàng thành công
-        echo '<meta http-equiv="refresh" content="0; URL=?page=cart"/>';
-    }
-    ?>
-
+    <?php include 'footer.php'; ?>
 </div>
+<!-- End Checkout Detail -->
+<?php
+
+include_once("connectDB.php");
+
+if (isset($_POST['addOrder'])) {
+    $username = $_POST['username'];
+    $cartItems = $_SESSION['cart'];
+    $totalPrice = $_POST['total_tax'];;
+    $id = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 2) . rand(1000, 9999);
+
+    // Thêm đơn hàng vào database
+    $sql = "INSERT INTO orders (order_id,username, total_price,status) VALUES ('$id','$username', '$totalPrice','0')";
+    mysqli_query($Connect, $sql);
+
+    // Thêm chi tiết đơn hàng vào database
+    foreach ($_SESSION['cart'] as $item) {
+        $order_detal_id = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 2) . rand(1000, 9999);;
+        $product_id = $item['id'];
+        $username = $item['username'];
+        $quantity = $item['quantity'];
+        $price = $item['price'];
+        $total_item_price = $quantity * $price;
+
+        $sql = "INSERT INTO order_details (order_detail_id,order_id, product_id, quantity, price, total_price,username) 
+                VALUES ('$order_detal_id','$id', '$product_id', '$quantity', '$price', '$total_item_price','$username')";
+        mysqli_query($Connect, $sql);
+    }
+    // Chuyển hướng về trang thông báo đặt hàng thành công
+    echo '<meta http-equiv="refresh" content="0; URL=?page=cart"/>';
+}
+?>

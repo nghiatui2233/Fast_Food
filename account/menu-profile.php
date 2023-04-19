@@ -40,13 +40,12 @@
       </div>
       <ul>
         <li <?= ($current_page == 'yor') ? 'class="active"' : '' ?>><a href="?page=yor">Yoru Order</a></li>
-        <li <?= ($current_page == 'address') ? 'class="active"' : '' ?>><a href="#">Your address</a></li>
         <li <?= ($current_page == 'pf') ? 'class="active"' : '' ?>><a href="?page=pf">Account details</a></li>
         <li <?= ($current_page == 'reps') ? 'class="active"' : '' ?>><a href="?page=reps">Reset Password</a></li>
         <li <?= ($current_page == 'delete') ? 'class="active"' : '' ?>><a href="#">Delete account</a></li>
       </ul>
       <div class="back-button-container">
-        <button onclick="window.location='../index.php'" class="button"><i class="fas fa-chevron-left"></i>Back</button>
+        <button onclick="window.location='../index.php'" class="button">Back</button>
       </div>
     </div>
     <div class="container-account">

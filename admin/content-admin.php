@@ -2,6 +2,7 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+<?php include_once("connectDBadmin.php"); ?>
 <main class="app-content">
   <div class="row">
     <div class="col-md-12">
@@ -15,26 +16,48 @@
     <div class="col-md-12 col-lg-6">
       <div class="row">
         <!-- col-6 -->
+        <?php
+        $sql = "SELECT COUNT(*) AS total_customers FROM customer";
+        $res = mysqli_query($Connect, $sql);
+        $row = mysqli_fetch_assoc($res);
+        $total_customers = $row['total_customers'];
+        ?>
+
         <div class="col-md-6">
           <div class="widget-small primary coloured-icon"><i class='icon bx bxs-user-account fa-3x'></i>
             <div class="info">
-              <h4>Tổng khách hàng</h4>
-              <p><b>56 khách hàng</b></p>
-              <p class="info-tong">Tổng số khách hàng được quản lý.</p>
+              <h4>Total customers</h4>
+              <p><b><?php echo $total_customers ?> customers</b></p>
+              <p class="info-tong">Total number of clients managed.</p>
             </div>
           </div>
         </div>
         <!-- col-6 -->
+        <?php
+        $order = "SELECT COUNT(*) AS total_order FROM orders";
+        $total = mysqli_query($Connect, $order);
+        $row = mysqli_fetch_assoc($total);
+        $total_order = $row['total_order'];
+        ?>
         <div class="col-md-6">
           <div class="widget-small warning coloured-icon"><i class='icon bx bxs-shopping-bags fa-3x'></i>
             <div class="info">
-              <h4>Tổng đơn hàng</h4>
-              <p><b>247 đơn hàng</b></p>
-              <p class="info-tong">Tổng số hóa đơn bán hàng trong tháng.</p>
+              <h4>Total Orders</h4>
+              <p><b><?php echo $total_order ?> Orders</b></p>
+              <p class="info-tong">Total sales invoices for the month.</p>
             </div>
           </div>
         </div>
         <!-- col-12 -->
+        <?php
+        $status = "SELECT o.*, c.CustomerName
+        FROM orders o
+        JOIN customer c ON o.username = c.username
+        ORDER BY o.date_buy DESC
+        LIMIT 5
+        ";
+        $order = mysqli_query($Connect, $status);
+        ?>
         <div class="col-md-12">
           <div class="tile">
             <h3 class="tile-title">Tình trạng đơn hàng</h3>
@@ -42,45 +65,34 @@
               <table class="table table-bordered">
                 <thead>
                   <tr>
-                    <th>ID đơn hàng</th>
-                    <th>Tên khách hàng</th>
-                    <th>Tổng tiền</th>
-                    <th>Trạng thái</th>
+                    <th>Order ID</th>
+                    <th>Customer Name</th>
+                    <th>Total</th>
+                    <th>Status</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>AL3947</td>
-                    <td>Phạm Thị Ngọc</td>
-                    <td>
-                      19.770.000 đ
-                    </td>
-                    <td><span class="badge bg-info">Chờ xử lý</span></td>
-                  </tr>
-                  <tr>
-                    <td>ER3835</td>
-                    <td>Nguyễn Thị Mỹ Yến</td>
-                    <td>
-                      16.770.000 đ
-                    </td>
-                    <td><span class="badge bg-warning">Đang vận chuyển</span></td>
-                  </tr>
-                  <tr>
-                    <td>MD0837</td>
-                    <td>Triệu Thanh Phú</td>
-                    <td>
-                      9.400.000 đ
-                    </td>
-                    <td><span class="badge bg-success">Đã hoàn thành</span></td>
-                  </tr>
-                  <tr>
-                    <td>MT9835</td>
-                    <td>Đặng Hoàng Phúc </td>
-                    <td>
-                      40.650.000 đ
-                    </td>
-                    <td><span class="badge bg-danger">Đã hủy </span></td>
-                  </tr>
+                  <?php
+                  while ($row = mysqli_fetch_assoc($order)) {
+                  ?>
+                    <tr>
+                      <td><?php echo $row['order_id']; ?></td>
+                      <td><?php echo $row['CustomerName']; ?></td>
+                      <td>
+                        <?php echo $row['total_price']; ?>
+                      </td>
+                      <td> <?php if ($row['status'] == 0) { ?>
+                          <span class='badge bg-info'>Waiting for progressing</span>
+                        <?php } elseif ($row['status'] == 1) { ?>
+                          <span class='badge bg-warning'>Being transported</span>
+                        <?php } elseif ($row['status'] == 2) { ?>
+                          <span class='badge bg-success'>Accomplished</span>
+                        <?php } else { ?>
+                          <span class='badge bg-danger'>Cancelled</span>
+                        <?php } ?>
+                      </td>
+                    </tr>
+                  <?php } ?>
                 </tbody>
               </table>
             </div>
@@ -91,68 +103,74 @@
     </div>
     <!--END left-->
     <?php
-    include_once("connectDBadmin.php");
 
-    // kiểm tra xem người dùng đã gửi biểu mẫu bộ lọc hay chưa
-    if (isset($_POST['submit'])) {
-      $date_from = $_POST['date_from'];
-      $date_to = $_POST['date_to'];
-      // truy vấn đơn hàng trong khoảng thời gian đã chọn
-      $query = "SELECT od.*, o.status FROM order_details od, orders o WHERE od.date_buy BETWEEN '$date_from' AND '$date_to' AND od.order_id= o.order_id AND o.status != 3";
+    if (isset($_POST['loc'])) {
+      $date_from = $_POST['from'];
+      $date_to = $_POST['to'];
+      $total = "SELECT ROUND(SUM(total_price), 3) as price, date_buy, status
+      FROM orders Where status != 3 AND date_buy BETWEEN '$date_from' AND '$date_to'";
     } else {
-      // truy vấn tất cả các đơn hàng
-      $query = "SELECT od.*, o.status FROM order_details od, orders o Where o.status != 3 AND od.order_id= o.order_id";
+      $total = "SELECT ROUND(SUM(total_price), 3) as price
+      FROM orders Where status != 3 ";
     }
 
-    $result = mysqli_query($Connect, $query);
-
-    $chart_data = '';
-    while ($row = mysqli_fetch_array($result)) {
-      $chart_data .= "{ date_buy:'" . $row["date_buy"] . "', total_price:" . $row["total_price"] . ", quantity:" . $row["quantity"] . "}, ";
+    $result1 = mysqli_query($Connect, $total);
+    $row1 = mysqli_fetch_array($result1);
+    $sum = $row1['price'];
+    if (is_null($sum)) {
+      $sum = 0;
     }
-    $chart_data = substr($chart_data, 0, -2);
     ?>
     <!--Right-->
+
     <div class="col-md-12 col-lg-6">
       <div class="row">
         <div class="col-md-12">
+          <div class="widget-small primary coloured-icon"><i class='icon bx bxs-user-account fa-3x'></i>
+            <div class="info">
+              <h4>Total Price</h4>
+              <form method="POST">
+                From: <input type="date" name="from">
+                To: <input type="date" name="to">
+                <input type="submit" name="loc" value="Filter">
+              </form>
+              <p><b>$ <?php echo $sum ?></b></p>
+              <p class="info-tong">Total revenue managed.</p>
+            </div>
+          </div>
+        </div>
+        <?php
+        $cus = "SELECT * FROM customer
+        ORDER BY date_created DESC
+        LIMIT 5
+        ";
+        $customer = mysqli_query($Connect, $cus);
+        ?>
+        <div class="col-md-12">
           <div class="tile">
-            <h3 class="tile-title">Khách hàng mới</h3>
+            <h3 class="tile-title">New Customer</h3>
             <div>
               <table class="table table-hover">
                 <thead>
                   <tr>
-                    <th>ID</th>
-                    <th>Tên khách hàng</th>
-                    <th>Ngày sinh</th>
-                    <th>Số điện thoại</th>
+                    <th>Customer Name </th>
+                    <th>Birthday</th>
+                    <th>Number Phone</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>#183</td>
-                    <td>Hột vịt muối</td>
-                    <td>21/7/1992</td>
-                    <td><span class="tag tag-success">0921387221</span></td>
-                  </tr>
-                  <tr>
-                    <td>#219</td>
-                    <td>Bánh tráng trộn</td>
-                    <td>30/4/1975</td>
-                    <td><span class="tag tag-warning">0912376352</span></td>
-                  </tr>
-                  <tr>
-                    <td>#627</td>
-                    <td>Cút rang bơ</td>
-                    <td>12/3/1999</td>
-                    <td><span class="tag tag-primary">01287326654</span></td>
-                  </tr>
-                  <tr>
-                    <td>#175</td>
-                    <td>Hủ tiếu nam vang</td>
-                    <td>4/12/20000</td>
-                    <td><span class="tag tag-danger">0912376763</span></td>
-                  </tr>
+                  <?php
+                  while ($row = mysqli_fetch_assoc($customer)) {
+                  ?>
+                    <tr>
+                      <td><?php echo $row['CustomerName']; ?></td>
+                      <td><?php echo $row["Day"]; ?>/<?php echo $row["Month"]; ?>/<?php echo $row["Year"]; ?></td>
+                      <td><span class="tag tag-success"><?php echo $row["Phone"] ?></span></td>
+                    </tr>
+                    <tr>
+                    <?php
+                  }
+                    ?>
                 </tbody>
               </table>
             </div>
@@ -162,6 +180,31 @@
       </div>
     </div>
     <!--END right-->
+    <?php
+    if (isset($_POST['submit'])) {
+      $date_from = $_POST['date_from'];
+      $date_to = $_POST['date_to'];
+      $query = "SELECT SUM(od.quantity) as quantity,od.date_buy, o.status 
+          FROM order_details od, orders o 
+          WHERE od.date_buy BETWEEN '$date_from' AND '$date_to' 
+          AND od.order_id= o.order_id 
+          AND o.status != 3 
+          GROUP BY o.order_id";
+    } else {
+      $query = "SELECT SUM(od.quantity) as quantity, od.date_buy, o.status, o.total_price 
+          FROM order_details od, orders o 
+          Where o.status != 3 
+          AND od.order_id= o.order_id 
+          GROUP BY o.order_id";
+    }
+
+    $result = mysqli_query($Connect, $query);
+    $chart_data = '';
+    while ($row = mysqli_fetch_array($result)) {
+      $chart_data .= "{ date_buy:'" . $row["date_buy"] . "', total_price:" . $row["total_price"] . ", quantity:" . $row["quantity"] . "}, ";
+    }
+    $chart_data = substr($chart_data, 0, -2);
+    ?>
     <div class="col-md-12">
       <div class="tile">
         <h3 class="tile-title">Order Statistics Chart</h3>

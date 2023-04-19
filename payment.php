@@ -13,7 +13,7 @@ $vnp_TxnRef = time(); //Mã đơn hàng. Trong thực tế Merchant cần insert
 $vnp_OrderInfo = 'Payment with VNP';
 $vnp_OrderType = 'other';
 $vnp_Amount = $_POST['amount'] * 2300000;
-$vnp_Locale = 'vn';
+$vnp_Locale = 'en';
 $vnp_BankCode = 'NCB';
 $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
 // //Add Params of 2.0.1 Version

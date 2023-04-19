@@ -1,25 +1,15 @@
 <head>
-  <meta charset="UTF-8">
-  <title>Account</title>
-  <link rel="stylesheet" href="../css/custome.css">
-  <link rel="stylesheet" href="../css/styles1.css">
-  <link rel="stylesheet" href="../css/profile.css">
-  <link rel="stylesheet" href="../css/icons/all.css">
-  <!-- Link to jQuery library -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <!-- Link to SweetAlert library -->
-  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-  <script src="../js/login.js"></script>
-
-    <script>
-        function updateNotice() {
-            if (confirm("You have update successfully")) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-    </script>
+    <meta charset="UTF-8">
+    <title>Account</title>
+    <link rel="stylesheet" href="../css/custome.css">
+    <link rel="stylesheet" href="../css/styles1.css">
+    <link rel="stylesheet" href="../css/profile.css">
+    <link rel="stylesheet" href="../css/icons/all.css">
+    <!-- Link to jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Link to SweetAlert library -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="../js/login.js"></script>
 </head>
 <?php
 include_once("../connectDB.php");
@@ -108,11 +98,12 @@ if (isset($_SESSION['us'])) {
                     </span>
                 </div>
                 <div class=" user-box">
-                    <button type="submit" class="button" name="btnUpdate" id="btnUpdate" onclick="return updateNotice()">Update</button>
+                    <button type="submit" class="button" name="btnUpdate" id="btnUpdate">Update</button>
                 </div>
             </form>
         </div>
     </div>
+    <?php include '../footer.php'; ?>
 <?php
     if (isset($_POST['btnUpdate'])) {
         $Username = $_POST['Username'];

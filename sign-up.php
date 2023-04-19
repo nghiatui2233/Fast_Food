@@ -66,7 +66,7 @@ if (isset($_POST['btnRegister'])) {
     $res = mysqli_query($Connect, $sq);
     if (mysqli_num_rows($res) == 0) {
       mysqli_query($Connect, "INSERT INTO customer (UserName, Password, Email, Phone)
-             VALUES ('$us','$pass','$email','$phone')") or die(mysqli_error($Connect));
+             VALUES ('$us','$pass','$email','$phone','".date('Y-m-d H:i:s')."')") or die(mysqli_error($Connect));
       echo "<script>
       $(document).ready(function() { 
       swal({
@@ -144,5 +144,4 @@ if (isset($_POST['btnRegister'])) {
       showPasswordButton.innerHTML = '<i class="fas fa-eye-slash"></i>';
     }
   }
-
 </script>

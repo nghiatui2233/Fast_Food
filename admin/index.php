@@ -95,6 +95,8 @@
       }
       if ($page == "content") {
         include_once("content-admin.php");
+      }      if ($page == "dt") {
+        include_once("order_detail.php");
       }
     } else {
       include_once("content-admin.php");

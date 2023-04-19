@@ -1,6 +1,16 @@
+<style>
+    img {
+        width: 350px;
+        /* Độ rộng của hình ảnh */
+        height: auto;
+        display: block;
+        margin: 0 auto;
+        margin-top: 20px;
+    }
+</style>
 <header class="header">
     <div class="logo">
-        <h2 type="submit" href="?page=content"> Fast Food</h2>
+        <h2><a href="?page=content"><img src="./img/HatchfulExport-All/logo_transparent.png"></a></h2>
     </div>
     <div class="usr-toggle">
         <?php

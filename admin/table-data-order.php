@@ -38,9 +38,8 @@
                   <th width="10"><input type="checkbox" id="all"></th>
                   <th>Order ID</th>
                   <th>Customer</th>
-                  <th>Account</th>
-                  <th>Product</th>
-                  <th>Quantity</th>
+                  <th>Phone</th>
+                  <th>Address</th>
                   <th>Total Payment</th>
                   <th>Status</th>
                   <th>Edit</th>
@@ -49,11 +48,9 @@
               <tbody>
                 <?php
                 include_once("connectDBadmin.php");
-                $sql = "SELECT o.*, p.name, c.CustomerName, od.* 
-                FROM order_details od
-                JOIN product p ON od.product_id = p.product_id
-                JOIN customer c ON od.username = c.username
-                JOIN orders o ON o.order_id = od.order_id
+                $sql = "SELECT o.*,c.Phone, c.Address, c.CustomerName
+                FROM orders o
+                JOIN customer c ON o.username = c.username
                 ORDER BY o.date_buy DESC";
                 $result = mysqli_query($Connect, $sql);
                 while ($row = mysqli_fetch_array($result)) {
@@ -62,9 +59,8 @@
                     <td width="10"><input type="checkbox" name="check1" value="1"></td>
                     <td><?php echo $row["order_id"]; ?></td>
                     <td><?php echo $row["CustomerName"]; ?></td>
-                    <td><?php echo $row["username"]; ?></td>
-                    <td><?php echo $row["name"]; ?></td>
-                    <td><?php echo $row["quantity"]; ?></td>
+                    <td><?php echo $row["Phone"]; ?></td>
+                    <td><?php echo $row["Address"]; ?></td>
                     <td>$<?php echo $row["total_price"]; ?></td>
                     <td> <?php if ($row['status'] == 0) { ?>
                         <span class='badge bg-info confirm-order' data-orderid='<?php echo $row["order_id"]; ?>'>Waiting for progressing</span>
@@ -78,6 +74,7 @@
                     </td>
                     <td>
                       <button class='btn btn-primary btn-sm trash' onclick='deleteOrder( "<?php echo urlencode($row["order_id"]); ?>" )' type='button' title='Delete'><i class='fas fa-trash-alt'></i></button>
+                      <button class="btn btn-primary btn-sm edit" type="button" onclick="window.location='?page=dt&&id=<?php echo $row['order_id'] ?>'"><i class="fas fa-edit"></i>
                     </td>
                   </tr>
                 <?php
