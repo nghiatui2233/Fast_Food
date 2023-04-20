@@ -100,7 +100,7 @@
       include_once("content-admin.php");
     }
   } else {
-    echo '<meta http-equiv="refresh" content="0; URL=https://app-name-js.herokuapp.com/?page=sign-in"/>'
+    echo '<meta http-equiv="refresh" content="0; URL=../sign-in.php"/>';
   }
     ?>
   </main>
