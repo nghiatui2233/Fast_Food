@@ -64,6 +64,7 @@
   </aside>
   <main>
     <?php
+      if (isset($_SESSION['us']) && $_SESSION['us'] === true) { 
     if (isset($_GET['page'])) {
       $page = $_GET['page'];
       if ($page == "tdproduct") {
@@ -90,9 +91,6 @@
       if ($page == "order") {
         include_once('table-data-order.php');
       }
-      if ($page == "logout") {
-        include_once('logout.php');
-      }
       if ($page == "content") {
         include_once("content-admin.php");
       }      if ($page == "dt") {
@@ -101,6 +99,9 @@
     } else {
       include_once("content-admin.php");
     }
+  } else {
+    echo '<meta http-equiv="refresh" content="0; URL=https://app-name-js.herokuapp.com/?page=sign-in"/>'
+  }
     ?>
   </main>
   <script src="js/jquery-3.2.1.min.js"></script>
