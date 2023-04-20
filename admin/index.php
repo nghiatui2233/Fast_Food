@@ -64,7 +64,7 @@
   </aside>
   <main>
     <?php
-      if (isset($_SESSION['us']) && $_SESSION['us'] === true) { 
+      if (isset($_SESSION['us']) && $_SESSION['us'] != "") { 
     if (isset($_GET['page'])) {
       $page = $_GET['page'];
       if ($page == "tdproduct") {
