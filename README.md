@@ -2,7 +2,7 @@
 # FastFood Dashboard
 
 
-Website link: https://app-name-js.herokuapp.com/ <br>
+Website link: https://app-name-js.herokuapp.com/
 
 
 Account admin: admin <br> password: 123456 <br>
