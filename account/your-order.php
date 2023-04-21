@@ -161,7 +161,7 @@ if (mysqli_num_rows($result) > 0) {
 <script>
     $(document).ready(function() {
         $('.cancellation-order').on('click', function() {
-            var orderId = $(this).data('orderid');
+            var orderId = $(this).data('orderid1');
             swal({
                 title: "Confirmation",
                 text: "Are you sure to confirm this order?",
@@ -174,7 +174,7 @@ if (mysqli_num_rows($result) > 0) {
                         url: 'cancellation.php',
                         method: 'POST',
                         data: {
-                            order_id: orderId1
+                            order_id: orderId
                         },
                         success: function(data) {
                             swal({
