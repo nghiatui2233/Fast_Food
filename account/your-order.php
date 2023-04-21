@@ -42,19 +42,29 @@ if (mysqli_num_rows($result) > 0) {
                 ?>
                     <h3 style="color: aliceblue;"><?php echo $order_date ?></h3>
                     <button type='button' class="btn-md fill cancellation-order" style="background-color: red; color: white;" data-orderid1='<?php echo $row["order_id"]; ?>'> Order Cancellation</button>
-                <?php
+                    <?php
                 } elseif ($status == 3) {
-                ?>
-                    <h3 style="color: aliceblue;"><?php echo $order_date ?></h3>
-                    <strong><p style="color: red;">Order has been cancelled</p></strong>
-                    <button type='button' class="btn-md fill re-order" data-orderid2='<?php echo $row["order_id"]; ?>'> Re-order</button>
+                    ?>
+                        <h3 style="color: aliceblue;"><?php echo $order_date ?></h3>
+                        <strong>
+                            <p style="color: red;">Order has been cancelled</p>
+                        </strong>
+                        <button type='button' class="btn-md fill re-order" data-orderid2='<?php echo $row["order_id"]; ?>'> Re-order</button>
+                        <button type='button' class="btn-md fill cancellation-order" data-orderid1='<?php echo $row["order_id"]; ?>'> Order Cancellation</button>
+                    <?php
+                } elseif ($status == 3) {
+                    ?>
+                        <h3 style="color: aliceblue;"><?php echo $order_date ?></h3>
+                        <p>Order has been cancelled</p>
+                        <button type='button' class="btn-md fill"> Re-order</button>
+
                 <?php
                 } else {
                 ?>
-                    <h3 style="color: aliceblue;"><?php echo $order_date ?></h3>
-                <?php
-                }
-                ?>
+                    <h3 style=" color: aliceblue;"><?php echo $order_date ?></h3>
+                        <?php
+                    }
+                        ?>
             </div>
             <hr>
             <div class="order-inner">
@@ -96,7 +106,7 @@ if (mysqli_num_rows($result) > 0) {
                     } elseif ($status == 2) {
                     ?>
                         <h3 style="color: aquamarine;">Order completed</h3>
-                        <?php
+                    <?php
                     } elseif ($status == 0) {
                     ?>
                         <h3 style="color: yellow;">Order is pending confirmation</h3>
