@@ -103,7 +103,6 @@ if (isset($_SESSION['us'])) {
             </form>
         </div>
     </div>
-    <?php include '../footer.php'; ?>
 <?php
     if (isset($_POST['btnUpdate'])) {
         $Username = $_POST['Username'];
