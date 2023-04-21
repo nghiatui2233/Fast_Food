@@ -41,7 +41,7 @@ if (mysqli_num_rows($result) > 0) {
                 if ($status != 2) {
                 ?>
                     <h3 style="color: aliceblue;"><?php echo $order_date ?></h3>
-                    <button type='button' class="btn-md fill cancellation-order" data-orderid='<?php echo $row["order_id"]; ?>'> Order Cancellation</button>
+                    <button type='button' class="btn-md fill cancellation-order" data-orderid1='<?php echo $row["order_id"]; ?>'> Order Cancellation</button>
                 <?php
                 } else {
                 ?>
@@ -174,7 +174,7 @@ if (mysqli_num_rows($result) > 0) {
                         url: 'cancellation.php',
                         method: 'POST',
                         data: {
-                            order_id: orderId
+                            order_id: orderId1
                         },
                         success: function(data) {
                             swal({
