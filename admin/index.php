@@ -100,9 +100,7 @@
       include_once("content-admin.php");
     }
   } else {
-
-    header("location: ../index.php?page=sign-in");
-    exit;
+    echo '<meta http-equiv="refresh" content="0; URL=../index.php?page=sign-in"/>';
   }
     ?>
   </main>
