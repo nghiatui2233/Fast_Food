@@ -38,10 +38,16 @@ if (mysqli_num_rows($result) > 0) {
         <div class="form">
             <div class="checkout-detail" id="total">
                 <?php
-                if ($status != 2) {
+                if ($status == 1) {
                 ?>
                     <h3 style="color: aliceblue;"><?php echo $order_date ?></h3>
-                    <button type='button' class="btn-md fill cancellation-order" data-orderid='<?php echo $row["order_id"]; ?>'> Order Cancellation</button>
+                    <button type='button' class="btn-md fill cancellation-order" style="background-color: red; color: white;" data-orderid1='<?php echo $row["order_id"]; ?>'> Order Cancellation</button>
+                <?php
+                } elseif ($status == 3) {
+                ?>
+                    <h3 style="color: aliceblue;"><?php echo $order_date ?></h3>
+                    <strong><p style="color: red;">Order has been cancelled</p></strong>
+                    <button type='button' class="btn-md fill re-order" data-orderid2='<?php echo $row["order_id"]; ?>'> Re-order</button>
                 <?php
                 } else {
                 ?>
@@ -90,6 +96,10 @@ if (mysqli_num_rows($result) > 0) {
                     } elseif ($status == 2) {
                     ?>
                         <h3 style="color: aquamarine;">Order completed</h3>
+                        <?php
+                    } elseif ($status == 0) {
+                    ?>
+                        <h3 style="color: yellow;">Order is pending confirmation</h3>
                     <?php
                     }
                     ?>
@@ -160,8 +170,44 @@ if (mysqli_num_rows($result) > 0) {
 </script>
 <script>
     $(document).ready(function() {
+        $('.re-order').on('click', function() {
+            var orderId = $(this).data('orderid2');
+            swal({
+                title: "Confirmation",
+                text: "Are you sure you want to order again?",
+                icon: "warning",
+                buttons: ["Cancel", "Confirm"],
+                dangerMode: true,
+            }).then((willConfirm) => {
+                if (willConfirm) {
+                    $.ajax({
+                        url: 're-order.php',
+                        method: 'POST',
+                        data: {
+                            order_id: orderId
+                        },
+                        success: function(data) {
+                            swal({
+                                title: "Success!",
+                                text: data,
+                                icon: "success",
+                            }).then(() => {
+                                location.reload();
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            console.log(xhr.responseText);
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
         $('.cancellation-order').on('click', function() {
-            var orderId = $(this).data('orderid');
+            var orderId = $(this).data('orderid1');
             swal({
                 title: "Confirmation",
                 text: "Are you sure to confirm this order?",
