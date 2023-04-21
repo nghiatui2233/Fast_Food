@@ -1,5 +1,5 @@
-Website link: https://app-name-js.herokuapp.com/
+//Website link: https://app-name-js.herokuapp.com/
 
 
-Account admin: admin password: 123456
-Account customer: Nghiatui113 password: 123456
+//Account admin: admin password: 123456
+//Account customer: Nghiatui113 password: 123456
