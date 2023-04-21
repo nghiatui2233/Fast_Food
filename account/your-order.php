@@ -43,6 +43,12 @@ if (mysqli_num_rows($result) > 0) {
                     <h3 style="color: aliceblue;"><?php echo $order_date ?></h3>
                     <button type='button' class="btn-md fill cancellation-order" data-orderid1='<?php echo $row["order_id"]; ?>'> Order Cancellation</button>
                 <?php
+                }elseif ($status == 3) {
+                ?>
+                    <h3 style="color: aliceblue;"><?php echo $order_date ?></h3>
+                    <p>Order has been cancelled</p>
+                    <button type='button' class="btn-md fill> Re-order</button>
+                <?php
                 } else {
                 ?>
                     <h3 style="color: aliceblue;"><?php echo $order_date ?></h3>
