@@ -6,11 +6,10 @@
             $sql = "SELECT * FROM category";
             $result = $Connect->query($sql);
 
-            // Lấy category ID được chọn từ tham số URL
+            // lay category ID
             $selected_category_id = isset($_GET['id']) ? $_GET['id'] : null;
 
 
-            // Loop qua các category và tạo HTML tương ứng
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
                     $id = $row["category_id"];
@@ -23,7 +22,6 @@
                     // Thêm class "active" cho menu item nếu được chọn
                     $class = $is_selected ? 'active' : '';
 
-                    // Tạo HTML cho menu item
                     echo '<li><a href="index.php?=categorylist&id=' . $id . '" class="nav-item ' . $class . '" data-target="' . $id . '"><i class="fas ' . $icon . '" style="font-size:24px;margin-bottom:3px;"></i>' . $name . '</a></li>';
                 }
             }
@@ -106,7 +104,6 @@
             <?php
             }
             if (isset($_POST['btnCart'])) {
-                // Lấy thông tin sản phẩm từ form POST
                 if (!isset($_SESSION["us"])) {
                     echo "<script>
                         $(document).ready(function() { 
@@ -140,24 +137,23 @@
                         );
                     }
 
-                    // Kiểm tra xem giỏ hàng đã được khởi tạo hay chưa
                     if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
                         // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
                         $found = false;
                         foreach ($_SESSION['cart'] as &$item) {
                             if ($item['name'] == $product['name']) {
-                                // Nếu sản phẩm đã có trong giỏ hàng, tăng số lượng lên 1
+                                // neu san pham co san +1
                                 $item['quantity']++;
                                 $found = true;
                                 break;
                             }
                         }
                         if (!$found) {
-                            // Nếu sản phẩm chưa có trong giỏ hàng, thêm sản phẩm mới vào giỏ hàng
+                            // khong co san pham thi them vao
                             $_SESSION['cart'][] = $product;
                         }
                     } else {
-                        // Nếu giỏ hàng chưa được khởi tạo, thêm sản phẩm vào giỏ hàng
+                        // chua co gio hang thi tao gio hang
                         $_SESSION['cart'][] = $product;
                     }
                 }
@@ -296,7 +292,7 @@ if (isset($_POST['addOrder'])) {
     $id = substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 2) . rand(1000, 9999);
 
     // Thêm đơn hàng vào database
-    $sql = "INSERT INTO orders (order_id,username, total_price,status) VALUES ('$id','$username', '$totalPrice','0')";
+    $sql = "INSERT INTO orders (order_id,username, total_price,status, date_buy) VALUES ('$id','$username', '$totalPrice','0','".date('Y-m-d H:i:s')."')";
     mysqli_query($Connect, $sql);
 
     // Thêm chi tiết đơn hàng vào database
@@ -308,8 +304,8 @@ if (isset($_POST['addOrder'])) {
         $price = $item['price'];
         $total_item_price = $quantity * $price;
 
-        $sql = "INSERT INTO order_details (order_detail_id,order_id, product_id, quantity, price, total_price,username) 
-                VALUES ('$order_detal_id','$id', '$product_id', '$quantity', '$price', '$total_item_price','$username')";
+        $sql = "INSERT INTO order_details (order_detail_id,order_id, product_id, quantity, price, total_price,username,date_buy) 
+                VALUES ('$order_detal_id','$id', '$product_id', '$quantity', '$price', '$total_item_price','$username','".date('Y-m-d H:i:s')."')";
         mysqli_query($Connect, $sql);
     }
     // Chuyển hướng về trang thông báo đặt hàng thành công
