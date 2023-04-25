@@ -28,7 +28,7 @@
     <div class="row">
       <div class="col-md-12">
         <div class="tile">
-          <h3 class="tile-title">Create a new category</h3>
+          <h3 class="tile-title">Update category</h3>
           <div class="tile-body">
             <?php
             include_once("connectDBadmin.php"); // Kết nối đến cơ sở dữ liệu
@@ -61,13 +61,13 @@
         </div>
   </main>
 <?php
-              if (isset($_POST["btnSave"])) { // Kiểm tra xem form đã được submit hay chưa
+              if (isset($_POST["btnSave"])) { 
                 $id = $_POST["txtID"];
                 $name = $_POST["name"];
                 $icon = $_POST["icon"];
                 $err = "";
 
-                $sq = "SELECT * from category where category_name='$name'"; // Kiểm tra xem sản phẩm đã tồn tại trong cơ sở dữ liệu chưa
+                $sq = "SELECT * from category where category_name='$name'";
                 $result = mysqli_query($Connect, $sq);
 
                 if (trim($name) == "") {
