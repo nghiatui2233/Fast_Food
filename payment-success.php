@@ -23,7 +23,6 @@
                     ?>
                     <h1 style="color: azure;">Your total payment is:</h1>
                     <h1 style="color: coral;">$<?php echo $row['total_price'] ?></h1>
-                    <h1 style="color: coral;">$<?php echo $max_date ?></h1>
                     <h1 style="color: azure;">Your order will be prepared and delivered right away!</h1>
                 </div>
                 <hr>
