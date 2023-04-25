@@ -65,7 +65,7 @@ if (isset($_POST['btnRegister'])) {
     $sq = "SELECT * FROM customer WHERE UserName='$us'";
     $res = mysqli_query($Connect, $sq);
     if (mysqli_num_rows($res) == 0) {
-      mysqli_query($Connect, "INSERT INTO customer (UserName, Password, Email, Phone)
+      mysqli_query($Connect, "INSERT INTO customer (UserName, Password, Email, Phone,date_created)
              VALUES ('$us','$pass','$email','$phone','".date('Y-m-d H:i:s')."')") or die(mysqli_error($Connect));
       echo "<script>
       $(document).ready(function() { 

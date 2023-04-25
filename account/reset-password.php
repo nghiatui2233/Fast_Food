@@ -1,6 +1,6 @@
 <head>
     <meta charset="UTF-8">
-    <title>Register</title>
+    <title>Reset Password</title>
     <link rel="stylesheet" href="../css/custome.css">
     <link rel="stylesheet" href="../css/styles1.css">
     <link rel="stylesheet" href="../css/login.css">

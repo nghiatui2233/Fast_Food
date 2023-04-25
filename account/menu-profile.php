@@ -42,7 +42,7 @@
         <li <?= ($current_page == 'yor') ? 'class="active"' : '' ?>><a href="?page=yor">Yoru Order</a></li>
         <li <?= ($current_page == 'pf') ? 'class="active"' : '' ?>><a href="?page=pf">Account details</a></li>
         <li <?= ($current_page == 'reps') ? 'class="active"' : '' ?>><a href="?page=reps">Reset Password</a></li>
-        <li <?= ($current_page == 'delete') ? 'class="active"' : '' ?>><a href="#">Delete account</a></li>
+        <li <?= ($current_page == 'delete') ? 'class="active"' : '' ?>><a href="?page=delete">Delete account</a></li>
       </ul>
       <div class="back-button-container">
         <button onclick="window.location='../index.php'" class="button">Back</button>
@@ -67,6 +67,9 @@
           }
           if ($page == "logout") {
             include_once('../logout.php');
+          }
+          if ($page == "delete") {
+            include_once('delete-account.php');
           }
         } else {
           include_once("profile.php");
