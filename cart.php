@@ -77,10 +77,20 @@
     </div>
 </div>
 <?php
+$sql_max_date = "SELECT MAX(date_buy) as max_date FROM orders WHERE date_buy BETWEEN NOW() - INTERVAL 1 DAY AND NOW()";
+$result_max_date = mysqli_query($Connect, $sql_max_date);
+$row_max_date = mysqli_fetch_assoc($result_max_date);
+$max_date = $row_max_date['max_date'];
+
+$sql_max_detail = "SELECT MAX(date_buy) as max_date FROM orders WHERE date_buy BETWEEN NOW() - INTERVAL 1 DAY AND NOW()";
+$result_max_detail = mysqli_query($Connect, $sql_max_detail);
+$row_max_detail = mysqli_fetch_assoc($result_max_detail);
+$max_detail = $row_max_detail['max_date'];
+
 if (isset($_POST['removeOrder'])) {
     $username = $_POST['username'];
-    $delete_sql = "DELETE FROM orders WHERE username = '$username'";
-    $delete_sql1 = "DELETE FROM order_details WHERE username = '$username'";
+    $delete_sql = "DELETE FROM orders WHERE username = '$username' And date_buy = '$max_date' ";
+    $delete_sql1 = "DELETE FROM order_details WHERE username = '$username' And date_buy = '$max_detail'";
     mysqli_query($Connect, $delete_sql);
     mysqli_query($Connect, $delete_sql1);
     echo '<meta http-equiv="refresh" content="0;URL =?page=content"';
