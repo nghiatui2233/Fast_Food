@@ -122,6 +122,7 @@
     }
     ?>
     <!--Right-->
+
     <div class="col-md-12 col-lg-6">
       <div class="row">
         <div class="col-md-12">
@@ -173,46 +174,47 @@
                 </tbody>
               </table>
             </div>
+
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <!--END right-->
-  <?php
-  if (isset($_POST['submit'])) {
-    $date_from = $_POST['date_from'];
-    $date_to = $_POST['date_to'];
-    $query = "SELECT SUM(od.quantity) as quantity,od.date_buy, o.status 
+    <!--END right-->
+    <?php
+    if (isset($_POST['submit'])) {
+      $date_from = $_POST['date_from'];
+      $date_to = $_POST['date_to'];
+      $query = "SELECT SUM(od.quantity) as quantity,od.date_buy, o.status 
           FROM order_details od, orders o 
           WHERE od.date_buy BETWEEN '$date_from' AND '$date_to' 
           AND od.order_id= o.order_id 
           AND o.status != 3 
           GROUP BY o.order_id";
-  } else {
-    $query = "SELECT SUM(od.quantity) as quantity, od.date_buy, o.status, o.total_price 
+    } else {
+      $query = "SELECT SUM(od.quantity) as quantity, od.date_buy, o.status, o.total_price 
           FROM order_details od, orders o 
           Where o.status != 3 
           AND od.order_id= o.order_id 
           GROUP BY o.order_id";
-  }
+    }
 
-  $result = mysqli_query($Connect, $query);
-  $chart_data = '';
-  while ($row = mysqli_fetch_array($result)) {
-    $chart_data .= "{ date_buy:'" . $row["date_buy"] . "', total_price:" . $row["total_price"] . ", quantity:" . $row["quantity"] . "}, ";
-  }
-  $chart_data = substr($chart_data, 0, -2);
-  ?>
-  <div class="col-md-12">
-    <div class="tile">
-      <h3 class="tile-title">Order Statistics Chart</h3>
-      <form method="POST">
-        From: <input type="date" name="date_from">
-        To: <input type="date" name="date_to">
-        <input type="submit" name="submit" value="Filter">
-      </form>
-      <div id="chart"></div>
+    $result = mysqli_query($Connect, $query);
+    $chart_data = '';
+    while ($row = mysqli_fetch_array($result)) {
+      $chart_data .= "{ date_buy:'" . $row["date_buy"] . "', total_price:" . $row["total_price"] . ", quantity:" . $row["quantity"] . "}, ";
+    }
+    $chart_data = substr($chart_data, 0, -2);
+    ?>
+    <div class="col-md-12">
+      <div class="tile">
+        <h3 class="tile-title">Order Statistics Chart</h3>
+        <form method="POST">
+          From: <input type="date" name="date_from">
+          To: <input type="date" name="date_to">
+          <input type="submit" name="submit" value="Filter">
+        </form>
+        <div id="chart"></div>
+      </div>
     </div>
   </div>
 </main>
