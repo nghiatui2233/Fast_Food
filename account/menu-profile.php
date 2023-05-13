@@ -39,7 +39,7 @@
         ?>
       </div>
       <ul>
-        <li <?= ($current_page == 'yor') ? 'class="active"' : '' ?>><a href="?page=yor">Yoru Order</a></li>
+        <li <?= ($current_page == 'yor') ? 'class="active"' : '' ?>><a href="?page=yor">Your Order</a></li>
         <li <?= ($current_page == 'pf') ? 'class="active"' : '' ?>><a href="?page=pf">Account details</a></li>
         <li <?= ($current_page == 'reps') ? 'class="active"' : '' ?>><a href="?page=reps">Reset Password</a></li>
         <li <?= ($current_page == 'delete') ? 'class="active"' : '' ?>><a href="?page=delete">Delete account</a></li>
