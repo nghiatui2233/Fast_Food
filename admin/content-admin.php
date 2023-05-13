@@ -1,12 +1,3 @@
-<link rel="stylesheet" type="text/css" href="css/main.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
-<!-- or -->
-<link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
-<!-- Font-icon css-->
-<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
@@ -239,17 +230,3 @@
     stacked: true
   });
 </script>
-<script src="js/jquery-3.2.1.min.js"></script>
-<!--===============================================================================================-->
-<script src="js/popper.min.js"></script>
-<script src="https://unpkg.com/boxicons@latest/dist/boxicons.js"></script>
-<!--===============================================================================================-->
-<script src="js/bootstrap.min.js"></script>
-<!--===============================================================================================-->
-<script src="js/main.js"></script>
-<!--===============================================================================================-->
-<script src="js/plugins/pace.min.js"></script>
-<!--===============================================================================================-->
-<script type="text/javascript" src="js/plugins/chart.js"></script>
-<!--===============================================================================================-->
-<script src="js/time.js"></script>
