@@ -1,5 +1,6 @@
 
 # FastFood Dashboard
+Link: http://app-name-js.herokuapp.com
 Backup link:
 http://app-name-jss.herokuapp.com
 
