@@ -120,45 +120,72 @@
                     exit();
                 } else {
                     if (isset($_SESSION["us"])) {
-                        $username = $_SESSION['us'];
-                        $product_id = $_POST['product_id'];
-                        $product_name = $_POST['name'];
-                        $product_img = $_POST['img'];
-                        $price = $_POST['price'];
-                        $quantity = 1;
-
-                        $product = array(
-                            'id' => $product_id,
-                            'img' => $product_img,
-                            'name' => $product_name,
-                            'username' => $username,
-                            'price' => $price,
-                            'quantity' => $quantity
-                        );
+                        $sql = "SELECT * FROM product";
+                        $result = $Connect->query($sql);
+            
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $productName = $row["name"];
+                                $productStatus = $row["status"];
+            
+                                // Check stock
+                                if ($productStatus == 0) {
+                                    echo "<script>
+                                        $(document).ready(function() { 
+                                        swal({
+                                            title: 'Wait!',
+                                            text: 'Sorry, the product is out of stock!',
+                                            icon: 'warning',
+                                            button: 'OK',
+                                        }).then(function() {
+                                            window.location.href = '?page=content';
+                                        });
+                                        });
+                                    </script>";
+                                    exit(); 
+                                } else {
+                                    $username = $_SESSION['us'];
+                                    $product_id = $_POST['product_id'];
+                                    $product_name = $_POST['name'];
+                                    $product_img = $_POST['img'];
+                                    $price = $_POST['price'];
+                                    $quantity = 1;
+            
+                                    $product = array(
+                                        'id' => $product_id,
+                                        'img' => $product_img,
+                                        'name' => $product_name,
+                                        'username' => $username,
+                                        'price' => $price,
+                                        'quantity' => $quantity
+                                    );
+                                }
+                            }
+                        }
                     }
-
                     if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
                         // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
                         $found = false;
                         foreach ($_SESSION['cart'] as &$item) {
                             if ($item['name'] == $product['name']) {
-                                // neu san pham co san +1
+                                // Nếu sản phẩm đã có, tăng số lượng lên 1
                                 $item['quantity']++;
                                 $found = true;
                                 break;
                             }
                         }
                         if (!$found) {
-                            // khong co san pham thi them vao
+                            // Nếu sản phẩm chưa có, thêm vào giỏ hàng
                             $_SESSION['cart'][] = $product;
                         }
                     } else {
-                        // chua co gio hang thi tao gio hang
+                        // Nếu chưa có giỏ hàng, tạo giỏ hàng mới
                         $_SESSION['cart'][] = $product;
                     }
                 }
             }
             ?>
+            
         </div>
 
         <!-- End Main Menu -->
