@@ -68,6 +68,7 @@
                                         <input type="hidden" name="img" value="admin/img/<?php echo $row["image"] ?>">
                                         <input type="hidden" name="name" value="<?php echo $row["name"] ?>">
                                         <input type="hidden" name="price" value="<?php echo $row["price"] ?>">
+                                        <input type="hidden" name="status" value="<?php echo $row["status"] ?>">
                                         <button type="submit" name="btnCart">&#43;</button>
                                     </form>
                                 </div>
@@ -91,6 +92,7 @@
                                         <input type="hidden" name="img" value="admin/img/<?php echo $row["image"] ?>">
                                         <input type="hidden" name="name" value="<?php echo $row["name"] ?>">
                                         <input type="hidden" name="price" value="<?php echo $row["price"] ?>">
+                                        <input type="hidden" name="status" value="<?php echo $row["status"] ?>">
                                         <button type="submit" name="btnCart">&#43;</button>
                                     </form>
                                 </div>
@@ -120,72 +122,62 @@
                     exit();
                 } else {
                     if (isset($_SESSION["us"])) {
-                        $sql = "SELECT * FROM product";
-                        $result = $Connect->query($sql);
-            
-                        if ($result->num_rows > 0) {
-                            while ($row = $result->fetch_assoc()) {
-                                $productName = $row["name"];
-                                $productStatus = $row["status"];
-            
-                                // Check stock
-                                if ($productStatus == 0) {
-                                    echo "<script>
-                                        $(document).ready(function() { 
-                                        swal({
-                                            title: 'Wait!',
-                                            text: 'Sorry, the product is out of stock!',
-                                            icon: 'warning',
-                                            button: 'OK',
-                                        }).then(function() {
-                                            window.location.href = '?page=content';
-                                        });
-                                        });
-                                    </script>";
-                                    exit(); 
-                                } else {
-                                    $username = $_SESSION['us'];
-                                    $product_id = $_POST['product_id'];
-                                    $product_name = $_POST['name'];
-                                    $product_img = $_POST['img'];
-                                    $price = $_POST['price'];
-                                    $quantity = 1;
-            
-                                    $product = array(
-                                        'id' => $product_id,
-                                        'img' => $product_img,
-                                        'name' => $product_name,
-                                        'username' => $username,
-                                        'price' => $price,
-                                        'quantity' => $quantity
-                                    );
+                        $username = $_SESSION['us'];
+                        $product_id = $_POST['product_id'];
+                        $product_name = $_POST['name'];
+                        $product_img = $_POST['img'];
+                        $price = $_POST['price'];
+                        $quantity = 1;
+                        $status =$_POST['status'];
+
+                        if ($status == 1) {
+                            $product = array(
+                                'id' => $product_id,
+                                'img' => $product_img,
+                                'name' => $product_name,
+                                'username' => $username,
+                                'price' => $price,
+                                'quantity' => $quantity
+                            );
+
+                            if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
+                                // Check if the product is already in the cart
+                                $found = false;
+                                foreach ($_SESSION['cart'] as &$item) {
+                                    if ($item['name'] == $product['name']) {
+                                        // If the product is already in the cart, increase the quantity by 1
+                                        $item['quantity']++;
+                                        $found = true;
+                                        break;
+                                    }
                                 }
+                                if (!$found) {
+                                    // If the product is not in the cart, add it to the cart
+                                    $_SESSION['cart'][] = $product;
+                                }
+                            } else {
+                                // If there is no cart, create a new one
+                                $_SESSION['cart'][] = $product;
                             }
+                        } else {
+                            // Product is out of stock, display a message
+                            echo "<script>
+                                $(document).ready(function() { 
+                                swal({
+                                    title: 'Out of Stock!',
+                                    text: 'This product is currently out of stock.',
+                                    icon: 'warning',
+                                    button: 'OK',
+                                });
+                                });
+                            </script>";
                         }
-                    }
-                    if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
-                        // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
-                        $found = false;
-                        foreach ($_SESSION['cart'] as &$item) {
-                            if ($item['name'] == $product['name']) {
-                                // Nếu sản phẩm đã có, tăng số lượng lên 1
-                                $item['quantity']++;
-                                $found = true;
-                                break;
-                            }
-                        }
-                        if (!$found) {
-                            // Nếu sản phẩm chưa có, thêm vào giỏ hàng
-                            $_SESSION['cart'][] = $product;
-                        }
-                    } else {
-                        // Nếu chưa có giỏ hàng, tạo giỏ hàng mới
-                        $_SESSION['cart'][] = $product;
                     }
                 }
             }
+
             ?>
-            
+
         </div>
 
         <!-- End Main Menu -->
