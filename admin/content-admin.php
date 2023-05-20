@@ -184,7 +184,7 @@
     if (isset($_POST['submit'])) {
       $date_from = $_POST['date_from'];
       $date_to = $_POST['date_to'];
-      $query = "SELECT SUM(od.quantity) as quantity,od.date_buy, o.status 
+      $query = "SELECT SUM(od.quantity) as quantity, od.date_buy, o.status, o.total_price 
           FROM order_details od, orders o 
           WHERE od.date_buy BETWEEN '$date_from' AND '$date_to' 
           AND od.order_id= o.order_id 
