@@ -59,6 +59,12 @@
       swal('Error!', '', 'error'); 
     });</script>";
               }
+              if (trim($price) <= 0) {
+                $err .= "Enter product name, please <br>";
+                echo "<script>$(document).ready(function() { 
+                        swal('Error!', 'Price cannot be negative and cannot be 0', 'error'); 
+                        });</script>";
+              } 
               if (!is_numeric($price)) {
                 $err .= "Product price must be number <br>";
                 echo "<script>$(document).ready(function() { 
